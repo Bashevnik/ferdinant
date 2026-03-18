@@ -903,8 +903,15 @@ a {
 /* --- MEDIA QUERIES --- */
 @media (max-width: 1024px) {
     .site-header {
-        height: 70px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 80px;
         padding: 0 4vw;
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 2000;
+        width: 100%;
     }
 
     .brand-logo img {
@@ -1095,7 +1102,9 @@ a {
     }
 
     .site-header {
-        height: 80px; /* Slightly taller header for better balance on mobile */
+        height: 80px; 
+        position: fixed;
+        top: 0;
     }
 
     .product-img-wrapper {
