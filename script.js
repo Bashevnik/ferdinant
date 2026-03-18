@@ -43,14 +43,14 @@ if (canvas) {
 
 // --- MOBILE MENU ---
 const menuToggle = document.getElementById('menuToggle');
-const closeMenu = document.getElementById('closeMenuBtn');
+const closeBtn = document.getElementById('closeMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => mobileMenu.classList.add('active'));
-    closeMenu.addEventListener('click', () => mobileMenu.classList.remove('active'));
+    menuToggle.onclick = () => mobileMenu.classList.add('active');
+    closeBtn.onclick = () => mobileMenu.classList.remove('active');
 }
 
-// --- SLIDER WITH DRAG/SWIPE ---
+// --- NEW PRECISION SWIPER ---
 const slider = document.getElementById('barberSlider');
 const nextBtn = document.getElementById('nextBarber');
 const prevBtn = document.getElementById('prevBarber');
@@ -64,179 +64,184 @@ if (slider && nextBtn) {
     let animationID = 0;
     let startPos = 0;
 
-    const getVisibleCards = () => {
+    const cards = Array.from(slider.querySelectorAll('.card'));
+    
+    function updateSlider() {
+        const cardWidth = cards[0].offsetWidth + 1; // 1px for border-gap
+        currentTranslate = -index * cardWidth;
+        prevTranslate = currentTranslate;
+        slider.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+        setSliderPosition();
+    }
+
+    function setSliderPosition() {
+        slider.style.transform = `translateX(${currentTranslate}px)`;
+    }
+
+    function getVisibleCount() {
         if (window.innerWidth > 1024) return 3;
         if (window.innerWidth > 768) return 2;
         return 1;
-    };
+    }
 
-    const updateSlider = () => {
-        const cardWidth = slider.querySelector('.card').offsetWidth;
-        currentTranslate = -index * cardWidth;
-        prevTranslate = currentTranslate;
-        slider.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-        setSliderPosition();
-    };
-
-    const setSliderPosition = () => {
-        slider.style.transform = `translateX(${currentTranslate}px)`;
-    };
-
-    const nextFunc = () => {
-        const total = slider.querySelectorAll('.card').length;
-        const visible = getVisibleCards();
-        if (index < total - visible) index++;
+    nextBtn.onclick = () => {
+        if (index < cards.length - getVisibleCount()) index++;
         updateSlider();
     };
 
-    const prevFunc = () => {
+    prevBtn.onclick = () => {
         if (index > 0) index--;
         updateSlider();
     };
 
-    nextBtn.addEventListener('click', nextFunc);
-    prevBtn.addEventListener('click', prevFunc);
-
-    // Mouse and Touch Events
-    const touchStart = (e) => {
+    // Swipe logic
+    slider.onmousedown = (e) => {
         isDragging = true;
-        startX = getPositionX(e);
+        startX = e.pageX;
         startPos = startX;
         slider.style.transition = 'none';
-        animationID = requestAnimationFrame(animation);
+        animationID = requestAnimationFrame(animateDrag);
         slider.style.cursor = 'grabbing';
     };
 
-    const touchMove = (e) => {
+    window.onmousemove = (e) => {
         if (!isDragging) return;
-        const currentX = getPositionX(e);
-        const diff = currentX - startX;
-        currentTranslate = prevTranslate + diff;
+        const currentX = e.pageX;
+        currentTranslate = prevTranslate + (currentX - startX);
     };
 
-    const touchEnd = (e) => {
+    window.onmouseup = (e) => {
         if (!isDragging) return;
         isDragging = false;
         cancelAnimationFrame(animationID);
         slider.style.cursor = 'grab';
         
-        const cardWidth = slider.querySelector('.card').offsetWidth;
         const movedBy = currentTranslate - prevTranslate;
         
-        // Prevent click if we moved significantly
-        if (Math.abs(startPos - getPositionX(e)) > 10) {
-           slider.classList.add('is-dragging');
+        // Block clicks if moved
+        if (Math.abs(startPos - e.pageX) > 10) {
+            slider.classList.add('is-dragging');
         } else {
-           slider.classList.remove('is-dragging');
+            slider.classList.remove('is-dragging');
         }
 
-        if (movedBy < -cardWidth / 4) nextFunc();
-        else if (movedBy > cardWidth / 4) prevFunc();
-        else updateSlider();
+        // --- STRICT 1 SLIDE LOGIC ---
+        if (movedBy < -50) { // Swiped left -> Next 1 card
+            if (index < cards.length - getVisibleCount()) index++;
+        } else if (movedBy > 50) { // Swiped right -> Prev 1 card
+            if (index > 0) index--;
+        }
+        updateSlider();
     };
 
-    const getPositionX = (e) => {
-        return e.type.includes('mouse') ? e.pageX : e.nativeEvent ? e.nativeEvent.touches[0].clientX : e.touches[0].clientX;
+    // Touch
+    slider.ontouchstart = (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        startPos = startX;
+        slider.style.transition = 'none';
+        animationID = requestAnimationFrame(animateDrag);
     };
 
-    const animation = () => {
+    slider.ontouchmove = (e) => {
+        if (!isDragging) return;
+        const currentX = e.touches[0].clientX;
+        currentTranslate = prevTranslate + (currentX - startX);
+    };
+
+    slider.ontouchend = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        const movedBy = currentTranslate - prevTranslate;
+        const finalX = e.changedTouches[0].clientX;
+
+        if (Math.abs(startPos - finalX) > 10) {
+            slider.classList.add('is-dragging');
+        } else {
+            slider.classList.remove('is-dragging');
+        }
+
+        if (movedBy < -50) {
+            if (index < cards.length - getVisibleCount()) index++;
+        } else if (movedBy > 50) {
+            if (index > 0) index--;
+        }
+        updateSlider();
+    };
+
+    function animateDrag() {
         setSliderPosition();
-        if (isDragging) requestAnimationFrame(animation);
-    };
-
-    slider.addEventListener('mousedown', touchStart);
-    slider.addEventListener('mousemove', touchMove);
-    window.addEventListener('mouseup', touchEnd);
+        if (isDragging) requestAnimationFrame(animateDrag);
+    }
     
-    slider.addEventListener('touchstart', touchStart, { passive: true });
-    slider.addEventListener('touchmove', touchMove, { passive: true });
-    slider.addEventListener('touchend', touchEnd);
-
-    // Initial positioning
-    window.addEventListener('resize', updateSlider);
+    window.onresize = updateSlider;
+    window.onload = updateSlider;
 }
 
-// --- BARBER MODAL ---
+// --- MODAL BARBER ---
 const barberCards = document.querySelectorAll('.barber-card');
 const barberModal = document.getElementById('barberModal');
 const closeBarber = document.querySelector('.close-barber');
-const bmImg = document.getElementById('bm-img');
-const bmName = document.getElementById('bm-name');
-const bmTitle = document.getElementById('bm-title');
-const bmDesc = document.getElementById('bm-desc');
 
 if (barberModal) {
     barberCards.forEach(card => {
-        card.addEventListener('click', function(e) {
-            // Respect the was-dragging state
+        card.onclick = function(e) {
             if (slider && slider.classList.contains('is-dragging')) {
                 slider.classList.remove('is-dragging');
                 return;
             }
             if (e.target.classList.contains('open-contact-modal')) return;
 
+            const bmName = document.getElementById('bm-name');
+            const bmTitle = document.getElementById('bm-title');
+            const bmDesc = document.getElementById('bm-desc');
+            const bmImg = document.getElementById('bm-img');
+
             if (bmName) bmName.textContent = this.dataset.name;
             if (bmTitle) bmTitle.textContent = this.dataset.title;
             if (bmDesc) bmDesc.textContent = this.dataset.desc;
 
-            const photoEl = this.querySelector('.card-photo-src');
-            if (bmImg && photoEl) {
-                bmImg.style.backgroundImage = 'url("' + photoEl.src + '")';
-            }
+            const src = this.querySelector('.card-photo-src').src;
+            if (bmImg) bmImg.style.backgroundImage = `url(${src})`;
 
             barberModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-        });
+        };
     });
-
     if (closeBarber) {
-        closeBarber.addEventListener('click', () => {
+        closeBarber.onclick = () => {
             barberModal.classList.remove('active');
             document.body.style.overflow = '';
-        });
+        };
     }
 }
 
-// --- CONTACT MODAL ---
-const openContacts = document.querySelectorAll('.open-contact-modal');
+// --- CONTACT FORM ---
 const contactModal = document.getElementById('contactModal');
+document.querySelectorAll('.open-contact-modal').forEach(btn => {
+    btn.onclick = (e) => {
+        e.preventDefault();
+        contactModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+});
 const closeContact = document.querySelector('.close-contact');
-if (contactModal) {
-    openContacts.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault(); e.stopPropagation();
-            contactModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    });
-    if (closeContact) {
-        closeContact.addEventListener('click', () => {
-            contactModal.classList.remove('active');
-            if (barberModal && !barberModal.classList.contains('active')) document.body.style.overflow = '';
-        });
-    }
-    contactModal.addEventListener('click', (e) => {
-        if (e.target === contactModal) {
-            contactModal.classList.remove('active');
-            if (barberModal && !barberModal.classList.contains('active')) document.body.style.overflow = '';
-        }
-    });
-}
+if (closeContact) closeContact.onclick = () => {
+    contactModal.classList.remove('active');
+    if (!barberModal.classList.contains('active')) document.body.style.overflow = '';
+};
 
-// --- IMG ZOOM (PORTFOLIO) ---
-const zoomables = document.querySelectorAll('.img-zoom');
+// --- ZOOM IMG ---
 const imgOverlay = document.getElementById('imgModalOverlay');
-if (imgOverlay) {
-    zoomables.forEach(item => {
-        item.addEventListener('click', () => {
-            const imgSrc = item.querySelector('img').src;
-            const fullImg = document.getElementById('fullScreenImg');
-            if (fullImg) fullImg.src = imgSrc;
-            imgOverlay.classList.add('active');
-        });
-    });
-    const closeImg = document.querySelector('.close-img-modal');
-    if (closeImg) {
-        closeImg.addEventListener('click', () => imgOverlay.classList.remove('active'));
-    }
-}
+document.querySelectorAll('.img-zoom').forEach(item => {
+    item.onclick = () => {
+        const src = item.querySelector('img').src;
+        const full = document.getElementById('fullScreenImg');
+        if (full) full.src = src;
+        imgOverlay.classList.add('active');
+    };
+});
+const closeZoom = document.querySelector('.close-img-modal');
+if (closeZoom) closeZoom.onclick = () => imgOverlay.classList.remove('active');

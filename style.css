@@ -3,13 +3,13 @@
 :root {
     --bg-color: #050505;
     --text-main: #f0f0f0;
-    --text-muted: #666666;
-    --accent: #5d4a66;
-    /* Muted sophisticated violet */
+    --text-muted: #888888;
+    --accent: #5d4a66; /* Ferdinand Violet */
+    --accent-hover: #7b6287;
     --border: rgba(255, 255, 255, 0.08);
     --font-head: 'Oswald', sans-serif;
     --font-body: 'Inter', sans-serif;
-    --anim: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --anim: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -79,16 +79,14 @@ a {
     justify-content: space-between;
     align-items: center;
     height: 120px;
-    /* Fixed height on desktop */
     padding: 0 4vw;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
     background: rgba(5, 5, 5, 0.85);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.4s ease;
 }
 
@@ -96,19 +94,16 @@ a {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: var(--text-main);
 }
 
 .brand-logo img {
     height: 180px;
-    /* Big logo as requested */
+    /* Big logo as originally set */
     width: auto;
-    /* Removed filter: invert(1) */
     transition: transform 0.3s var(--anim);
     display: block;
     position: relative;
     top: 5px;
-    /* Fine-tune vertical position */
 }
 
 .brand-logo:hover img {
@@ -163,20 +158,39 @@ a {
 
 .btn-outline {
     border: 1px solid var(--border);
-    padding: 14px 28px;
+    padding: 12px 24px;
     font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     background: transparent;
     color: var(--text-main);
     cursor: pointer;
     transition: all 0.4s ease;
     font-family: var(--font-body);
+    font-weight: 500;
 }
 
 .btn-outline:hover {
-    background: var(--text-main);
-    color: var(--bg-color);
+    border-color: var(--text-main);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: none;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: scale(1.05);
 }
 
 /* --- MOBILE TOGGLE & MENU --- */
@@ -266,14 +280,17 @@ a {
 
 /* --- HERO SECTION --- */
 .hero {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
     padding: 0 4vw;
-    min-height: 100vh;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2500&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1);
 }
 
 .hero-bg-image {
@@ -964,6 +981,18 @@ a {
     .portfolio-grid {
         grid-template-columns: 1fr;
     }
+
+    .barber-modal-img {
+        height: 45vh;
+    }
+
+    .barber-modal-info {
+        padding: 30px 20px;
+    }
+
+    .barber-modal-info h2 {
+        font-size: clamp(32px, 10vw, 56px);
+    }
 }
 
 /* --- SMALL SCREEN ADAPTIVE 320–425px --- */
@@ -1088,8 +1117,57 @@ a {
     .card-title {
         font-size: 22px;
     }
-
     .barber-modal-info h2 {
         font-size: 28px;
     }
+}
+
+/* RIVAL MOUSE ANIMATION */
+.scroll-mouse {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    z-index: 10;
+}
+
+.scroll-mouse::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 6px;
+    background: #fff;
+    border-radius: 2px;
+    animation: mouseWheel 2s infinite;
+}
+
+@keyframes mouseWheel {
+    0% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, 15px); }
+}
+
+.map-section {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: var(--bg-color);
+}
+
+.accent-text {
+    color: var(--accent);
+    font-style: italic;
+}
+.map-overlay-full {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 5;
+    pointer-events: none;
 }
