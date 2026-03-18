@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Барбери - Ferdinand</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Barber card photo helper — img inside card used as image source */
+        .card-photo-src {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="page-wrapper">
+        <header class="site-header">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Ferdinand Logo">
+            </a>
+            <nav class="nav-links nav-desktop">
+                <a href="index.html">Головна</a>
+                <a href="barbers.html" class="active">Барбери</a>
+                <a href="services.html">Послуги</a>
+                <a href="portfolio.html">Роботи</a>
+                <a href="shop.html">Магазин</a>
+            </nav>
+            <div class="header-right nav-desktop">
+                <span class="header-phone">+38 (073) 023-87-56</span>
+                <button class="btn-outline open-contact-modal">ЗАПИСАТИСЯ</button>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </header>
+
+        <main class="page-container">
+            <div class="section-head">
+                <h1 class="section-title head-font">Команда</h1>
+                <span class="section-meta">01 / Наші майстрині</span>
+            </div>
+
+            <div class="barber-slider-container">
+                <div class="barber-slider" id="barberSlider">
+
+                    <!-- Олександра -->
+                    <div class="card barber-card" data-name="Олександра" data-title="Top Barber / Creative Founder"
+                        data-desc="Олександра — серце нашого барбершопу. Вона майстерно поєднує класичну точність із сучасним баченням чоловічого стилю. Спеціалізується на складних стрижках та моделюванні бороди.">
+                        <img class="card-photo-src" src="assets/barber1.JPG" alt="Олександра">
+                        <div class="card-img-bg" style="background-image: url('assets/barber1.JPG');"></div>
+                        <div class="card-content">
+                            <span class="card-num">01</span>
+                            <div>
+                                <h3 class="card-title head-font">Олександра</h3>
+                                <p class="card-subtitle">Top Barber / Founder</p>
+                                <button class="btn-outline">Детальніше</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Дарина -->
+                    <div class="card barber-card" data-name="Дарина" data-title="Senior Barber"
+                        data-desc="Дарина — майстриня ідеальних ліній та бездоганних фейдів. Вона переконана, що кожна деталь має значення. Її техніка гоління — це справжній ритуал професіоналізму та релаксу.">
+                        <img class="card-photo-src" src="assets/barber2.JPG" alt="Дарина">
+                        <div class="card-img-bg" style="background-image: url('assets/barber2.JPG');"></div>
+                        <div class="card-content">
+                            <span class="card-num">02</span>
+                            <div>
+                                <h3 class="card-title head-font">Дарина</h3>
+                                <p class="card-subtitle">Senior Barber</p>
+                                <button class="btn-outline">Детальніше</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Олена -->
+                    <div class="card barber-card" data-name="Олена" data-title="Junior Barber"
+                        data-desc="Олена — талановита висхідна зірка нашої команди. Вона заряджає позитивом та створює легкі, динамічні образи. Спеціалізується на сучасних молодіжних стрижках.">
+                        <img class="card-photo-src"
+                            src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?q=80&w=1000&auto=format&fit=crop"
+                            alt="Олена">
+                        <div class="card-img-bg"
+                            style="background-image: url('https://images.unsplash.com/photo-1589156280159-27698a70f29e?q=80&w=1000&auto=format&fit=crop');">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-num">03</span>
+                            <div>
+                                <h3 class="card-title head-font">Олена</h3>
+                                <p class="card-subtitle">Junior Barber</p>
+                                <button class="btn-outline">Детальніше</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Юлія -->
+                    <div class="card barber-card" data-name="Юлія" data-title="Senior Barber"
+                        data-desc="Юлія — майстриня класичного гоління та догляду за шкірою обличчя. Її техніка — це спокій та ідеальний результат. Знає все про косметику для справжніх чоловіків.">
+                        <img class="card-photo-src"
+                            src="https://images.unsplash.com/photo-1574158622682-e40e69881006?q=80&w=1000&auto=format&fit=crop"
+                            alt="Юлія">
+                        <div class="card-img-bg"
+                            style="background-image: url('https://images.unsplash.com/photo-1574158622682-e40e69881006?q=80&w=1000&auto=format&fit=crop');">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-num">04</span>
+                            <div>
+                                <h3 class="card-title head-font">Юлія</h3>
+                                <p class="card-subtitle">Senior Barber</p>
+                                <button class="btn-outline">Детальніше</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="slider-nav">
+                <div class="slider-arrow" id="prevBarber">←</div>
+                <div class="slider-arrow" id="nextBarber">→</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="close-btn" id="closeMenuBtn">&times;</div>
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Logo">
+            </a>
+        </div>
+        <nav class="mobile-nav-links">
+            <a href="index.html" class="head-font">Головна</a>
+            <a href="barbers.html" class="active head-font">Барбери</a>
+            <a href="services.html" class="head-font">Послуги</a>
+            <a href="portfolio.html" class="head-font">Наші роботи</a>
+            <a href="shop.html" class="head-font">Магазин</a>
+        </nav>
+        <div class="mobile-menu-footer">
+            <button class="btn-outline open-contact-modal" style="width: 100%;">ЗАПИСАТИСЯ</button>
+            <div style="font-size: 14px; letter-spacing: 2px;">+38 (073) 023-87-56</div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="contactModal">
+        <div class="contact-form modal-content-box">
+            <div class="close-modal close-contact">&times;</div>
+            <h2 class="head-font" style="font-size: 32px; margin-bottom: 30px;">ЗАПИСАТИСЯ</h2>
+            <form>
+                <div class="form-group"><input type="text" placeholder="Ваше ім'я" required></div>
+                <div class="form-group"><input type="tel" placeholder="Ваш телефон" required></div>
+                <div class="form-group"><input type="date" required></div>
+                <button type="submit" class="btn-outline" style="width: 100%;">ВІДПРАВИТИ ЗАЯВКУ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Фулскрін Модалка Барбера -->
+    <div class="modal-overlay barber-modal" id="barberModal">
+        <div class="barber-box modal-content-box">
+            <div class="close-modal close-barber" style="font-size: 50px; right: 4vw; top: 40px; z-index: 100;">&times;
+            </div>
+            <div class="barber-modal-img" id="bm-img"></div>
+            <div class="barber-modal-info">
+                <span class="barber-role" id="bm-title"></span>
+                <h2 class="head-font" id="bm-name"></h2>
+                <p id="bm-desc" class="barber-desc"></p>
+                <div style="margin-top: 60px;">
+                    <button class="btn-outline open-contact-modal"
+                        style="padding: 20px 60px; font-size: 14px;">ЗАПИСАТИСЯ ДО МАЙСТРИНІ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

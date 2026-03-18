@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наші роботи - Ferdinand</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="page-wrapper">
+        <header class="site-header">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Ferdinand Logo">
+            </a>
+
+            <nav class="nav-links nav-desktop">
+                <a href="index.html">Головна</a>
+                <a href="barbers.html">Барбери</a>
+                <a href="services.html">Послуги</a>
+                <a href="portfolio.html" class="active">Роботи</a>
+                <a href="shop.html">Магазин</a>
+            </nav>
+
+            <div class="header-right nav-desktop">
+                <span class="header-phone">+38 (073) 023-87-56</span>
+                <button class="btn-outline open-contact-modal">ЗАПИСАТИСЯ</button>
+            </div>
+
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <main class="page-container">
+            <div class="section-head">
+                <h1 class="section-title head-font">Наші Роботи</h1>
+                <span class="section-meta">03 / Портфоліо</span>
+            </div>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&auto=format&fit=crop"
+                        alt="Work 1">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&auto=format&fit=crop"
+                        alt="Work 2">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&auto=format&fit=crop"
+                        alt="Work 3">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&auto=format&fit=crop"
+                        alt="Work 4">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&auto=format&fit=crop"
+                        alt="Work 5">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1590540179852-2110a54f813a?w=800&auto=format&fit=crop"
+                        alt="Work 6">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1621607512214-68297480165e?w=800&auto=format&fit=crop"
+                        alt="Work 7">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1590540179852-2110a54f813a?w=800&auto=format&fit=crop"
+                        alt="Work 8">
+                </div>
+                <div class="portfolio-item img-zoom">
+                    <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800&auto=format&fit=crop"
+                        alt="Work 9">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="close-btn" id="closeMenuBtn">&times;</div>
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Logo">
+            </a>
+        </div>
+        <nav class="mobile-nav-links">
+            <a href="index.html" class="head-font">Головна</a>
+            <a href="barbers.html" class="head-font">Барбери</a>
+            <a href="services.html" class="head-font">Послуги</a>
+            <a href="portfolio.html" class="active head-font">Наші роботи</a>
+            <a href="shop.html" class="head-font">Магазин</a>
+        </nav>
+        <div class="mobile-menu-footer">
+            <button class="btn-outline open-contact-modal" style="width: 100%;">ЗАПИСАТИСЯ</button>
+            <div style="font-size: 14px; letter-spacing: 2px;">+38 (073) 023-87-56</div>
+        </div>
+    </div>
+
+    <!-- Модалка контактів -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="contact-form modal-content-box">
+            <div class="close-modal close-contact">&times;</div>
+            <h2 class="head-font" style="font-size: 32px; margin-bottom: 30px;">ЗАПИСАТИСЯ</h2>
+            <form>
+                <div class="form-group"><input type="text" placeholder="Ваше ім'я" required></div>
+                <div class="form-group"><input type="tel" placeholder="Ваш телефон" required></div>
+                <div class="form-group"><input type="date" required></div>
+                <button type="submit" class="btn-outline" style="width: 100%;">ВІДПРАВИТИ ЗАЯВКУ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Глобальна модалка для портфоліо -->
+    <div class="img-modal-overlay" id="imgModalOverlay">
+        <div class="close-modal close-img-modal">&times;</div>
+        <div class="img-modal-content" id="imgModalContent">
+            <img src="" id="fullScreenImg" alt="Повний екран портфоліо">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

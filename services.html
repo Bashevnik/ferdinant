@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Послуги - Ferdinand</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="page-wrapper">
+        <header class="site-header">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Ferdinand Logo">
+            </a>
+
+            <nav class="nav-links nav-desktop">
+                <a href="index.html">Головна</a>
+                <a href="barbers.html">Барбери</a>
+                <a href="services.html" class="active">Послуги</a>
+                <a href="portfolio.html">Роботи</a>
+                <a href="shop.html">Магазин</a>
+            </nav>
+
+            <div class="header-right nav-desktop">
+                <span class="header-phone">+38 (073) 023-87-56</span>
+                <button class="btn-outline open-contact-modal">ЗАПИСАТИСЯ</button>
+            </div>
+
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <main class="page-container">
+            <div class="section-head">
+                <h1 class="section-title head-font">Наші Послуги</h1>
+                <span class="section-meta">02 / Прайс-лист</span>
+            </div>
+
+            <div class="service-list">
+                <!-- Стрижки -->
+                <div class="service-row">
+                    <h2 class="service-name head-font">Чоловіча стрижка</h2>
+                    <p class="service-desc">Класична або сучасна стрижка з використанням ножиць та машинки. Миття
+                        голови, підбір стайлінгу та рекомендації щодо догляду включені.</p>
+                    <span class="service-price">800 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Стрижка бороди та вусів</h2>
+                    <p class="service-desc">Надання форми бороді, чіткі контури небезпечною бритвою, використання
+                        преміальних масел та бальзамів.</p>
+                    <span class="service-price">500 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Королівське гоління</h2>
+                    <p class="service-desc">Ритуал з розпарюванням гарячим рушником, гоління небезпечною бритвою та
+                        заспокійливий догляд після.</p>
+                    <span class="service-price">600 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Комплекс: Стрижка + Борода</h2>
+                    <p class="service-desc">Повний образ від наших майстрів. Оптимальний вибір для тих, хто цінує свій
+                        час та стиль.</p>
+                    <span class="service-price">1200 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Дитяча стрижка (до 12 років)</h2>
+                    <p class="service-desc">Професійний підхід до наймолодших джентльменів. Стильно, як у тата.</p>
+                    <span class="service-price">600 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Камуфлювання сивини</h2>
+                    <p class="service-desc">М'яке тонування волосся або бороди для натурального вигляду без видимого
+                        ефекту фарбування.</p>
+                    <span class="service-price">450 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Чоловічий манікюр</h2>
+                    <p class="service-desc">Гігієнічний догляд за нігтями та шкірою рук. Акуратність — ознака успіху.
+                    </p>
+                    <span class="service-price">500 ₴</span>
+                </div>
+
+                <div class="service-row">
+                    <h2 class="service-name head-font">Чорна маска (Black Mask)</h2>
+                    <p class="service-desc">Глибоке очищення пор обличчя від забруднень. Свіжість та чиста шкіра за один
+                        сеанс.</p>
+                    <span class="service-price">300 ₴</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; text-align: center;">
+                <button class="btn-outline open-contact-modal" style="padding: 20px 60px; font-size: 14px;">ЗАПИСАТИСЯ
+                    НА ОБРАНУ ПОСЛУГУ</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Мобільне меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="close-btn" id="closeMenuBtn">&times;</div>
+            <a href="index.html" class="brand-logo">
+                <img src="assets/DEN.png" alt="Logo">
+            </a>
+        </div>
+        <nav class="mobile-nav-links">
+            <a href="index.html" class="head-font">Головна</a>
+            <a href="barbers.html" class="head-font">Барбери</a>
+            <a href="services.html" class="active head-font">Послуги</a>
+            <a href="portfolio.html" class="head-font">Наші роботи</a>
+            <a href="shop.html" class="head-font">Магазин</a>
+        </nav>
+        <div class="mobile-menu-footer">
+            <button class="btn-outline open-contact-modal" style="width: 100%;">ЗАПИСАТИСЯ</button>
+            <div style="font-size: 14px; letter-spacing: 2px;">+38 (073) 023-87-56</div>
+        </div>
+    </div>
+
+    <!-- Модалка контактів -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="contact-form modal-content-box">
+            <div class="close-modal close-contact">&times;</div>
+            <h2 class="head-font" style="font-size: 32px; margin-bottom: 30px;">ЗАПИСАТИСЯ</h2>
+            <form>
+                <div class="form-group"><input type="text" placeholder="Ваше ім'я" required></div>
+                <div class="form-group"><input type="tel" placeholder="Ваш телефон" required></div>
+                <div class="form-group">
+                    <select
+                        style="width: 100%; padding: 15px 0; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; outline: none; margin-bottom: 30px;">
+                        <option value="" disabled selected>Оберіть послугу</option>
+                        <option value="cut">Чоловіча стрижка</option>
+                        <option value="beard">Стрижка бороди</option>
+                        <option value="shave">Королівське гоління</option>
+                        <option value="complex">Комплекс</option>
+                    </select>
+                </div>
+                <div class="form-group"><input type="date" required></div>
+                <button type="submit" class="btn-outline" style="width: 100%;">ВІДПРАВИТИ ЗАЯВКУ</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
