@@ -1,4 +1,5 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+﻿/* Fonts loaded via HTML for better performance */
+
 
 :root {
     --bg-color: #050505;
@@ -92,30 +93,26 @@ a {
 }
 
 .brand-logo {
-    margin-left: -36px;
     display: flex;
     align-items: center;
     text-decoration: none;
 }
 
 .brand-logo img {
-    height: 170px;
+    height: 140px;
     width: auto;
     transition: transform 0.3s var(--anim);
     display: block;
-    position: relative;
+    margin-left: -20px;
+    /* Slight offset for PNG whitespace */
 }
 
 .logo-info {
-    margin-left: -20px;
-    margin-top: 19px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
-
     line-height: 1;
-    transform: translateY(-16px);
 }
 
 .logo-text,
@@ -1237,29 +1234,23 @@ a {
         left: 50%;
         transform: translateX(-50%);
         order: 1;
-        /* Center position between button and burger */
-        gap: 0;
         z-index: 5;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .brand-logo img {
-        margin-left: 10%;
-        height: 150px !important;
-        /* Made logo bigger */
-        position: relative;
-        top: 2px;
+        height: 110px !important;
+        margin-left: 0;
     }
 
     .logo-info {
-        margin-left: -20px;
         display: flex !important;
         flex-direction: row !important;
         z-index: 6;
-        text-align: left;
-        pointer-events: none;
-        gap: 4px;
-        transform: translateY(-10px);
+        gap: 6px;
     }
 
     .logo-text,
