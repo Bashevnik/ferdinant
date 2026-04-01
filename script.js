@@ -218,20 +218,21 @@ if (barberModal) {
     }
 }
 
-// --- CONTACT FORM ---
+// --- CONTACT FORM / BOOKING LINK ---
 const contactModal = document.getElementById('contactModal');
 document.querySelectorAll('.open-contact-modal').forEach(btn => {
     btn.onclick = (e) => {
         e.preventDefault();
-        contactModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        window.location.href = 'https://n765746.alteg.io/company/719724/personal/select-master?utm_source=ig&utm_medium=social&utm_content=link_in_bio&o=';
     };
 });
 const closeContact = document.querySelector('.close-contact');
-if (closeContact) closeContact.onclick = () => {
-    contactModal.classList.remove('active');
-    if (!barberModal.classList.contains('active')) document.body.style.overflow = '';
-};
+if (closeContact && contactModal) {
+    closeContact.onclick = () => {
+        contactModal.classList.remove('active');
+        if (typeof barberModal !== 'undefined' && barberModal && !barberModal.classList.contains('active')) document.body.style.overflow = '';
+    };
+}
 
 // --- ZOOM IMG ---
 const imgOverlay = document.getElementById('imgModalOverlay');

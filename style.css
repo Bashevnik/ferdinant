@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
     --bg-color: #050505;
     --text-main: #f0f0f0;
     --text-muted: #888888;
-    --accent: #5d4a66; /* Ferdinand Violet */
+    --accent: #5d4a66;
+    /* Ferdinand Violet */
     --accent-hover: #7b6287;
     --border: rgba(255, 255, 255, 0.08);
     --font-head: 'Oswald', sans-serif;
@@ -91,23 +92,46 @@ a {
 }
 
 .brand-logo {
+    margin-left: -36px;
     display: flex;
     align-items: center;
     text-decoration: none;
 }
 
 .brand-logo img {
-    height: 180px;
-    /* Big logo as originally set */
+    height: 170px;
     width: auto;
     transition: transform 0.3s var(--anim);
     display: block;
     position: relative;
-    top: 5px;
+}
+
+.logo-info {
+    margin-left: -20px;
+    margin-top: 19px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    line-height: 1;
+    transform: translateY(-16px);
+}
+
+.logo-text,
+.logo-subtext {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--text-main);
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .brand-logo:hover img {
     transform: scale(1.05);
+    /* slightly scale the bull */
 }
 
 .nav-links {
@@ -287,7 +311,7 @@ a {
     overflow: hidden;
     padding: 0 4vw;
     height: 100vh;
-    background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2500&auto=format&fit=crop');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2500&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     filter: grayscale(1);
@@ -801,9 +825,11 @@ a {
 
 /* SHOP SPECIFIC */
 .product-img-wrapper {
-    width: calc(100% + 80px); /* Fill the card padding */
+    width: calc(100% + 80px);
+    /* Fill the card padding */
     height: 350px;
-    margin: -50px -40px 30px -40px; /* Negative margin to bleed to edges */
+    margin: -50px -40px 30px -40px;
+    /* Negative margin to bleed to edges */
     overflow: hidden;
     background: #111;
 }
@@ -915,7 +941,8 @@ a {
     }
 
     .brand-logo img {
-        height: 110px; /* Increased from 90px for better visibility */
+        height: 110px;
+        /* Increased from 90px for better visibility */
         top: 0;
     }
 
@@ -1002,7 +1029,7 @@ a {
     }
 }
 
-/* --- SMALL SCREEN ADAPTIVE 320–425px --- */
+/* --- SMALL SCREEN ADAPTIVE 320вЂ“425px --- */
 @media (max-width: 425px) {
     .page-container {
         padding: 120px 5vw 60px;
@@ -1070,7 +1097,7 @@ a {
     }
 
     .barber-modal-img {
-        height: 40vh;
+        height: 42vh;
     }
 
     .barber-modal-info {
@@ -1098,18 +1125,19 @@ a {
     }
 
     .brand-logo img {
-        height: 90px; /* Increased from 50px as requested */
+        height: 90px;
     }
 
     .site-header {
-        height: 80px; 
+        height: 80px;
         position: fixed;
         top: 0;
     }
 
     .product-img-wrapper {
         height: 250px;
-        width: calc(100% + 40px); /* Fill small card padding */
+        width: calc(100% + 40px);
+        /* Fill small card padding */
         margin: -30px -20px 20px -20px;
     }
 }
@@ -1126,6 +1154,7 @@ a {
     .card-title {
         font-size: 22px;
     }
+
     .barber-modal-info h2 {
         font-size: 28px;
     }
@@ -1158,8 +1187,15 @@ a {
 }
 
 @keyframes mouseWheel {
-    0% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, 15px); }
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+    }
 }
 
 .map-section {
@@ -1173,10 +1209,129 @@ a {
     color: var(--accent);
     font-style: italic;
 }
+
 .map-overlay-full {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.4);
     z-index: 5;
     pointer-events: none;
+}
+
+/* --- MOBILE HEADER REDESIGN --- */
+@media (max-width: 768px) {
+    .site-header {
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4vw;
+        position: relative;
+    }
+
+    .brand-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        order: 1;
+        /* Center position between button and burger */
+        gap: 0;
+        z-index: 5;
+        white-space: nowrap;
+    }
+
+    .brand-logo img {
+        margin-left: 10%;
+        height: 150px !important;
+        /* Made logo bigger */
+        position: relative;
+        top: 2px;
+    }
+
+    .logo-info {
+        margin-left: -20px;
+        display: flex !important;
+        flex-direction: row !important;
+        z-index: 6;
+        text-align: left;
+        pointer-events: none;
+        gap: 4px;
+        transform: translateY(-10px);
+    }
+
+    .logo-text,
+    .logo-subtext {
+        font-family: var(--font-head) !important;
+        font-size: 16px !important;
+        letter-spacing: 1px !important;
+        font-weight: 500 !important;
+        color: var(--text-main);
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-toggle {
+        order: 0;
+        /* Back to the left */
+        margin: 0;
+        padding: 5px;
+        z-index: 10;
+        margin-left: -10px;
+    }
+
+    .m-book-btn {
+        display: none !important;
+        /* Fully removed from header as requested */
+    }
+}
+
+/* --- CONTACT BUBBLES --- */
+.contact-bubble,
+.booking-bubble {
+    position: fixed;
+    left: 4vw;
+    height: 50px;
+    padding: 0 20px;
+    background: #fff;
+    color: #000;
+    border-radius: 50px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 1500;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.contact-bubble {
+    bottom: 30px;
+}
+
+.booking-bubble {
+    bottom: 95px;
+}
+
+.contact-bubble:hover,
+.booking-bubble:hover {
+    transform: translateY(-5px);
+    background: #f8f8f8;
+}
+
+.m-book-btn {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+
+    .contact-bubble,
+    .booking-bubble {
+        display: flex;
+    }
 }
