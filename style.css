@@ -1174,22 +1174,72 @@ a {
     margin-bottom: 70px;
 }
 
-.about-split {
+.about-lede-v2 {
+    padding-bottom: 56px;
+}
+
+.about-paragraph-lede {
+    font-size: 17px;
+    color: #dedede;
+    max-width: 66ch;
+}
+
+.about-rail {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 380px;
-    gap: clamp(30px, 6vw, 84px);
+    grid-template-columns: minmax(0, 1fr) 420px;
+    gap: clamp(30px, 6vw, 86px);
     align-items: start;
-    padding: 54px 0;
-    border-bottom: 1px solid var(--border);
 }
 
-.about-split:last-child {
-    border-bottom: none;
+.about-rail-copy {
+    padding-right: clamp(0px, 2vw, 18px);
 }
 
-.about-side {
-    position: relative;
+.about-statement {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 18px;
+    padding: 26px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.about-statement:first-child {
+    padding-top: 0;
+}
+
+.about-statement-num {
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
     padding-top: 8px;
+}
+
+.about-statement-body .about-paragraph {
+    margin-bottom: 0;
+}
+
+.about-rail-media {
+    position: sticky;
+    top: 120px;
+    display: grid;
+    gap: 18px;
+}
+
+.about-portrait-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 50%),
+        rgba(255,255,255,0.01);
+    padding: 14px;
+}
+
+.about-caption {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    color: rgba(252,252,252,0.78);
+    opacity: 0.9;
 }
 
 .about-portrait {
@@ -1223,6 +1273,33 @@ a {
     gap: 34px;
     border-top: 1px solid var(--border);
     padding-top: 40px;
+}
+
+.advantages-grid-v2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 34px;
+}
+
+.advantage-row {
+    display: grid;
+    grid-template-columns: 60px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.advantage-row .adv-num {
+    margin: 0;
+    padding-top: 6px;
+}
+
+.advantage-row .adv-title {
+    margin-bottom: 8px;
+}
+
+.advantage-row .adv-desc {
+    margin: 0;
+    max-width: 46ch;
 }
 
 .advantage-tile {
@@ -1868,6 +1945,18 @@ a {
     }
 
     .advantages-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-rail {
+        grid-template-columns: 1fr;
+    }
+
+    .about-rail-media {
+        position: static;
+    }
+
+    .advantages-grid-v2 {
         grid-template-columns: 1fr;
     }
 }
