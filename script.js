@@ -306,8 +306,8 @@ if (aboutHero) {
 
             window.setTimeout(() => {
                 current.classList.remove('is-exiting');
-            }, 1300);
-        }, 3000);
+            }, 1700);
+        }, 4200);
     }
 }
 
