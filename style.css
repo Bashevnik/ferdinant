@@ -1161,8 +1161,8 @@ a {
 }
 
 .about-flow {
-    padding: 110px 4vw 40px;
-    max-width: 1400px;
+    padding: 92px 4vw 28px;
+    max-width: none;
     margin: 0 auto;
 }
 
@@ -1178,7 +1178,7 @@ a {
 .about-title {
     font-size: clamp(34px, 4.6vw, 64px);
     line-height: 1.05;
-    margin-bottom: 22px;
+    margin-bottom: 16px;
 }
 
 .about-subtitle {
@@ -1189,16 +1189,16 @@ a {
 
 .about-paragraph {
     font-size: 16px;
-    line-height: 1.85;
+    line-height: 1.72;
     color: #d6d6d6;
-    margin-bottom: 18px;
-    max-width: 60ch;
+    margin-bottom: 14px;
+    max-width: none;
 }
 
 .about-lede {
     border-bottom: 1px solid var(--border);
-    padding-bottom: 48px;
-    margin-bottom: 70px;
+    padding-bottom: 34px;
+    margin-bottom: 34px;
 }
 
 .about-lede-v2 {
@@ -1219,17 +1219,17 @@ a {
 }
 
 .about-hrows {
-    margin-top: 44px;
+    margin-top: 20px;
     display: grid;
-    gap: 44px;
+    gap: 20px;
 }
 
 .about-hrow {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(22px, 5vw, 72px);
+    gap: clamp(20px, 3.5vw, 52px);
     align-items: start;
-    padding: 34px 0;
+    padding: 24px 0;
     border-top: 1px solid rgba(255,255,255,0.06);
 }
 
@@ -1243,11 +1243,11 @@ a {
 }
 
 .about-hrow-text {
-    max-width: 64ch;
+    max-width: none;
 }
 
 .about-hrow .about-paragraph {
-    max-width: 58ch;
+    max-width: none;
 }
 
 .about-hrow-media {
@@ -1323,33 +1323,33 @@ a {
 }
 
 .about-advantages {
-    padding: 90px 4vw 120px;
-    max-width: 1320px;
+    padding: 56px 4vw 88px;
+    max-width: none;
     margin: 0 auto;
 }
 
 .about-advantages-head {
-    margin-bottom: 56px;
+    margin-bottom: 30px;
 }
 
 .advantages-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 34px;
+    gap: 20px;
     border-top: 1px solid var(--border);
-    padding-top: 40px;
+    padding-top: 20px;
 }
 
 .advantages-grid-v2 {
     grid-template-columns: 1fr 1fr;
-    gap: 18px 34px;
+    gap: 8px 28px;
 }
 
 .advantage-row {
     display: grid;
     grid-template-columns: 60px minmax(0, 1fr);
     gap: 14px;
-    padding: 18px 0;
+    padding: 12px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
