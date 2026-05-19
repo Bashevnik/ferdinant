@@ -198,6 +198,7 @@ if (barberModal) {
             const bmTitle = document.getElementById('bm-title');
             const bmDesc = document.getElementById('bm-desc');
             const bmImg = document.getElementById('bm-img');
+            const bmGallery = document.getElementById('bm-gallery');
 
             if (bmName) bmName.textContent = this.dataset.name;
             if (bmTitle) bmTitle.textContent = this.dataset.title;
@@ -205,6 +206,15 @@ if (barberModal) {
 
             const src = this.querySelector('.card-photo-src').src;
             if (bmImg) bmImg.style.backgroundImage = `url(${src})`;
+            if (bmGallery) {
+                const photos = (this.dataset.photos || '')
+                    .split(',')
+                    .map(photo => photo.trim())
+                    .filter(Boolean)
+                    .slice(0, 1);
+
+                bmGallery.innerHTML = photos.map(photo => `<img src="${photo}" alt="${this.dataset.name}">`).join('');
+            }
 
             barberModal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -246,3 +256,66 @@ document.querySelectorAll('.img-zoom').forEach(item => {
 });
 const closeZoom = document.querySelector('.close-img-modal');
 if (closeZoom) closeZoom.onclick = () => imgOverlay.classList.remove('active');
+
+// --- ABOUT BACKGROUND SLIDER ---
+const aboutSlider = document.querySelector('[data-about-slider]');
+if (aboutSlider) {
+    const slides = Array.from(aboutSlider.querySelectorAll('.about-bg-slide'));
+    let aboutIndex = 0;
+
+    if (slides.length) {
+        slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === 0));
+
+        setInterval(() => {
+            const current = slides[aboutIndex];
+            aboutIndex = (aboutIndex + 1) % slides.length;
+            const next = slides[aboutIndex];
+
+            current.classList.remove('active');
+            current.classList.add('exiting');
+            next.classList.add('active');
+
+            setTimeout(() => {
+                current.classList.remove('exiting');
+            }, 1400);
+        }, 3000);
+    }
+}
+
+// --- PREMIUM MOTION SYSTEM ---
+if (typeof gsap !== 'undefined') {
+    if (typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+        gsap.from('.hero-text-block > *, .section-head > *, .reveal-up', {
+            autoAlpha: 0.01,
+            y: 34,
+            duration: 1.15,
+            stagger: 0.12,
+            ease: 'power3.out',
+            delay: 0.08
+        });
+
+        if (typeof ScrollTrigger !== 'undefined') {
+            document.querySelectorAll('.service-row, .product-tile, .barber-card').forEach((el) => {
+                const textTarget = el.querySelector('.card-title, .product-info, .service-name');
+                if (!textTarget) return;
+                gsap.from(textTarget, {
+                    autoAlpha: 0.01,
+                    y: 22,
+                    duration: 0.75,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 88%',
+                        once: true
+                    }
+                });
+            });
+        }
+    }
+}
