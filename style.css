@@ -1103,10 +1103,36 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.about-hero-slides {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.about-hero-slide {
+    position: absolute;
+    inset: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-bottom: 1px solid var(--border);
+    filter: contrast(1.02) saturate(0.96);
+    transform: translateX(-110%);
+    opacity: 0;
+    transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease;
+    will-change: transform, opacity;
+}
+
+.about-hero-slide.is-active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.about-hero-slide.is-exiting {
+    transform: translateX(110%);
+    opacity: 1;
 }
 
 .about-hero-overlay {
@@ -1114,8 +1140,9 @@ a {
     inset: 0;
     background:
         radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.08), rgba(0,0,0,0)),
-        linear-gradient(180deg, rgba(5,5,5,0.22) 0%, rgba(5,5,5,0.40) 75%, rgba(5,5,5,0.66) 100%);
+        linear-gradient(180deg, rgba(5,5,5,0.18) 0%, rgba(5,5,5,0.34) 75%, rgba(5,5,5,0.60) 100%);
     pointer-events: none;
+    z-index: 1;
 }
 
 .about-wordmark-static {
@@ -1208,9 +1235,26 @@ a {
     margin-bottom: 12px;
 }
 
+.about-hrow-text {
+    max-width: 64ch;
+}
+
+.about-hrow .about-paragraph {
+    max-width: 58ch;
+}
+
 .about-hrow-media {
     display: flex;
     justify-content: flex-end;
+}
+
+.about-portrait-card {
+    width: min(460px, 100%);
+    border: 1px solid rgba(255,255,255,0.07);
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 50%),
+        rgba(255,255,255,0.01);
+    padding: 14px;
 }
 
 .about-swipe {

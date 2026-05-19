@@ -282,32 +282,31 @@ if (aboutSlider) {
     }
 }
 
-// About: right-swipe between portrait slides (keeps global background static)
-const aboutSwipe = document.querySelector('[data-about-swipe]');
-if (aboutSwipe) {
-    const swipeSlides = Array.from(aboutSwipe.querySelectorAll('.about-swipe-slide'));
-    let swipeIndex = swipeSlides.findIndex((s) => s.classList.contains('is-active'));
-    if (swipeIndex < 0) swipeIndex = 0;
+// About: right-swipe hero background
+const aboutHero = document.querySelector('[data-about-hero]');
+if (aboutHero) {
+    const heroSlides = Array.from(aboutHero.querySelectorAll('.about-hero-slide'));
+    let heroIndex = heroSlides.findIndex((s) => s.classList.contains('is-active'));
+    if (heroIndex < 0) heroIndex = 0;
 
-    swipeSlides.forEach((s, i) => {
-        s.classList.toggle('is-active', i === swipeIndex);
+    heroSlides.forEach((s, i) => {
+        s.classList.toggle('is-active', i === heroIndex);
         s.classList.remove('is-exiting');
     });
 
-    if (swipeSlides.length > 1) {
+    if (heroSlides.length > 1) {
         setInterval(() => {
-            const current = swipeSlides[swipeIndex];
-            swipeIndex = (swipeIndex + 1) % swipeSlides.length;
-            const next = swipeSlides[swipeIndex];
+            const current = heroSlides[heroIndex];
+            heroIndex = (heroIndex + 1) % heroSlides.length;
+            const next = heroSlides[heroIndex];
 
             current.classList.remove('is-active');
             current.classList.add('is-exiting');
-
             next.classList.add('is-active');
 
             window.setTimeout(() => {
                 current.classList.remove('is-exiting');
-            }, 1100);
+            }, 1300);
         }, 3000);
     }
 }
