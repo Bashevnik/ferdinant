@@ -7,7 +7,9 @@
     <title>Наші роботи - Ferdinand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -35,16 +37,43 @@
                 <a href="about/">Про нас</a>
                 <a href="barbers.html">Барбери</a>
                 <a href="services.html">Послуги</a>
-                <a href="portfolio.html" class="active">Роботи</a>
+                <a href="portfolio.html">Роботи</a>
                 <a href="shop.html">Магазин</a>
             </nav>
-
             <div class="header-right nav-desktop">
-                <span class="header-phone">+38 (073) 023-87-56</span>
+                <span class="header-phone" style="font-weight: 700;">+38 (073) 023-87-56</span>
                 <button class="btn-outline open-contact-modal">ЗАПИСАТИСЯ</button>
             </div>
-            
         </header>
+
+        <!-- Мобільне меню -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="close-btn" id="closeMenuBtn">&times;</div>
+                <a href="index.html" class="brand-logo">
+                    <img src="assets/DEN.png" alt="Logo">
+                    <div class="logo-info">
+                        <span class="logo-title">
+                            <span class="logo-text">FERDINAND</span>
+                            <span class="logo-subtext">BARBERSHOP</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <nav class="mobile-nav-links">
+                <a href="index.html" class="head-font">Головна</a>
+                <a href="about/" class="head-font">Про нас</a>
+                <a href="barbers.html" class="head-font">Барбери</a>
+                <a href="services.html" class="head-font">Послуги</a>
+                <a href="portfolio.html" class="head-font">Наші роботи</a>
+                <a href="shop.html" class="head-font">Магазин</a>
+            </nav>
+            <div class="mobile-menu-footer">
+                <button class="btn-outline open-contact-modal" style="width: 100%;">ЗАПИСАТИСЯ</button>
+                <div style="font-size: 14px; letter-spacing: 2px;">+38 (073) 023-87-56</div>
+            </div>
+        </div>
+
 
         <main class="page-container">
             <div class="section-head">
@@ -57,25 +86,39 @@
                     <img src="works/657770215_17882611719508412_2457186881826281403_n.jpg" alt="FERDINAND work 1">
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQMQnYFPHzCGglvXMS7kSKT8Ki1kRGd0PkTCnS7Lk-ziMuscpoJqGYm4Hbh8Q0YgjaU1EAlyKNsRSs3yWe3ePooTU1DHW4-bFDHUD9A.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQMQnYFPHzCGglvXMS7kSKT8Ki1kRGd0PkTCnS7Lk-ziMuscpoJqGYm4Hbh8Q0YgjaU1EAlyKNsRSs3yWe3ePooTU1DHW4-bFDHUD9A.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQNPTqzkS5Z2dEX83TRxETMK4HbiE2u9vbqHn0ylZoPGN5DkJ-5B19kKIjWGDr83bqFgy16Iw6i7zIl5EavU-4UGOQfz0gW0S-zICSg.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQNPTqzkS5Z2dEX83TRxETMK4HbiE2u9vbqHn0ylZoPGN5DkJ-5B19kKIjWGDr83bqFgy16Iw6i7zIl5EavU-4UGOQfz0gW0S-zICSg.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQO2KBQbPqv6VG_NT_3ywep_qCRr1AqS6u3lqe3AA1_QXDPwuazGd7JfNjWp3Lz8UvfLn8YyM80i4TRznwq7SGYjSIQe8G0mCTHw5A0.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQO2KBQbPqv6VG_NT_3ywep_qCRr1AqS6u3lqe3AA1_QXDPwuazGd7JfNjWp3Lz8UvfLn8YyM80i4TRznwq7SGYjSIQe8G0mCTHw5A0.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQOW419Pax94TQ43_OzFjX5gCEHFWxs4veDebWLLLQ2cV4kCRobvcdivTwhl_UCs6Mmc2z4e40s8cgSJ2TrGCLDZmKwY8JmYwtsPSpQ.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQOW419Pax94TQ43_OzFjX5gCEHFWxs4veDebWLLLQ2cV4kCRobvcdivTwhl_UCs6Mmc2z4e40s8cgSJ2TrGCLDZmKwY8JmYwtsPSpQ.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQOrzjTepr1iz2QJGxqkelV9EutoAJSsGV-40d1sMSQgwV_nP_zReR9-yQTLin-_c1f1OiSXQ7-1LxScTGcBz5KJ1bZpEPDyw9ULrj0.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQOrzjTepr1iz2QJGxqkelV9EutoAJSsGV-40d1sMSQgwV_nP_zReR9-yQTLin-_c1f1OiSXQ7-1LxScTGcBz5KJ1bZpEPDyw9ULrj0.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQP8CHK_9SMUFWXLSmLwWkEZE5X0p_DIIM6ZqEDEil6TVv_TLHMTGlmc_gAytc921yIQXcVF7-TCIDjv39W_Yo1gsgNaCa5QXyENIC4.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQP8CHK_9SMUFWXLSmLwWkEZE5X0p_DIIM6ZqEDEil6TVv_TLHMTGlmc_gAytc921yIQXcVF7-TCIDjv39W_Yo1gsgNaCa5QXyENIC4.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item portfolio-video">
-                    <video src="works/AQPW6Fx5TCpNzFp1zVhmqUzvWo-9kbM-3BRuPalvYwEJbz-E3W0fo5herlyAnO2XEWZOJ8JmsxoohRW59GkVb46t60bxIOKxP8sb7O0.mp4" muted loop autoplay playsinline controls></video>
+                    <video
+                        src="works/AQPW6Fx5TCpNzFp1zVhmqUzvWo-9kbM-3BRuPalvYwEJbz-E3W0fo5herlyAnO2XEWZOJ8JmsxoohRW59GkVb46t60bxIOKxP8sb7O0.mp4"
+                        muted loop autoplay playsinline controls></video>
                 </div>
                 <div class="portfolio-item img-zoom">
                     <img src="works/657770215_17882611719508412_2457186881826281403_n.jpg" alt="FERDINAND work 9">
@@ -102,11 +145,14 @@
                 </div>
                 <div>
                     <h3 class="footer-col-title head-font">Контакти</h3>
-                    <div class="footer-links" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+                    <div class="footer-links"
+                        style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
                         <span style="font-size: 14px; color: var(--text-muted);">+38 (073) 023-87-56</span>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <a href="tel:+380730238756" class="btn-outline" style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАТЕЛЕФОНУВАТИ</a>
-                            <button class="btn-outline open-contact-modal" style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАПИСАТИСЯ</button>
+                            <a href="tel:+380730238756" class="btn-outline"
+                                style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАТЕЛЕФОНУВАТИ</a>
+                            <button class="btn-outline open-contact-modal"
+                                style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАПИСАТИСЯ</button>
                         </div>
                     </div>
                 </div>
@@ -175,14 +221,16 @@
 
     <div class="booking-bubble open-contact-modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+            <path
+                d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
         </svg>
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
     <a href="tel:+380730238756" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z"/>
+            <path
+                d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z" />
         </svg>
         <span>ЗВ'ЯЗОК</span>
     </a>

@@ -7,7 +7,9 @@
     <title>Магазин - Ferdinand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         .product-grid-new {
@@ -227,14 +229,42 @@
                 <a href="barbers.html">Барбери</a>
                 <a href="services.html">Послуги</a>
                 <a href="portfolio.html">Роботи</a>
-                <a href="shop.html" class="active">Магазин</a>
+                <a href="shop.html">Магазин</a>
             </nav>
-
             <div class="header-right nav-desktop">
-                <span class="header-phone">+38 (073) 023-87-56</span>
+                <span class="header-phone" style="font-weight: 700;">+38 (073) 023-87-56</span>
                 <button class="btn-outline open-contact-modal">ЗАПИСАТИСЯ</button>
             </div>
         </header>
+
+        <!-- Мобільне меню -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="close-btn" id="closeMenuBtn">&times;</div>
+                <a href="index.html" class="brand-logo">
+                    <img src="assets/DEN.png" alt="Logo">
+                    <div class="logo-info">
+                        <span class="logo-title">
+                            <span class="logo-text">FERDINAND</span>
+                            <span class="logo-subtext">BARBERSHOP</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <nav class="mobile-nav-links">
+                <a href="index.html" class="head-font">Головна</a>
+                <a href="about/" class="head-font">Про нас</a>
+                <a href="barbers.html" class="head-font">Барбери</a>
+                <a href="services.html" class="head-font">Послуги</a>
+                <a href="portfolio.html" class="head-font">Наші роботи</a>
+                <a href="shop.html" class="head-font">Магазин</a>
+            </nav>
+            <div class="mobile-menu-footer">
+                <button class="btn-outline open-contact-modal" style="width: 100%;">ЗАПИСАТИСЯ</button>
+                <div style="font-size: 14px; letter-spacing: 2px;">+38 (073) 023-87-56</div>
+            </div>
+        </div>
+
 
         <main class="page-container" style="padding-top: 120px; min-height: 80vh;">
             <div class="section-head">
@@ -248,16 +278,19 @@
                     <span class="card-badge">Bestseller</span>
                     <div class="img-container-premium">
                         <img src="products/65_00093.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO" class="primary-img">
-                        <img src="products/65_00094.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO Detail" class="secondary-img">
+                        <img src="products/65_00094.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO Detail"
+                            class="secondary-img">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 101</div>
                         <h2 class="product-name head-font">DAILY SHAMPOO</h2>
-                        <p class="product-sub">Нормалізуючий щоденний шампунь для волосся. Делікатно очищує волосся, залишаючи його м'яким і кондиційованим.</p>
-                        
+                        <p class="product-sub">Нормалізуючий щоденний шампунь для волосся. Делікатно очищує волосся,
+                            залишаючи його м'яким і кондиційованим.</p>
+
                         <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
                         <div class="product-details-content">
-                            <strong>Активні інгредієнти:</strong> делікатні ПАР, рослинний комплекс, провітамін В5, ефірна олія шавлії, евкаліптол.
+                            <strong>Активні інгредієнти:</strong> делікатні ПАР, рослинний комплекс, провітамін В5,
+                            ефірна олія шавлії, евкаліптол.
                         </div>
 
                         <select class="volume-selector-premium" onchange="updateProductPrice(this)">
@@ -266,7 +299,8 @@
                         </select>
 
                         <div>
-                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span class="rrp-val">800</span> ₴</span>
+                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span
+                                    class="rrp-val">800</span> ₴</span>
                             <div class="price-row-premium">
                                 <span class="price-current"><span class="price-val">500</span> ₴</span>
                                 <span class="price-rrp"><span class="rrp-strike-val">800</span> ₴</span>
@@ -281,16 +315,19 @@
                     <span class="card-badge">Premium</span>
                     <div class="img-container-premium">
                         <img src="products/65_00096.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT" class="primary-img">
-                        <img src="products/65_00097.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT Detail" class="secondary-img">
+                        <img src="products/65_00097.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT Detail"
+                            class="secondary-img">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 205</div>
                         <h2 class="product-name head-font">HAIR TREATMENT</h2>
-                        <p class="product-sub">Зміцнюючий та відновлюючий лосьйон-догляд. Розроблений для протидії випадінню та відновлення сили волосся.</p>
-                        
+                        <p class="product-sub">Зміцнюючий та відновлюючий лосьйон-догляд. Розроблений для протидії
+                            випадінню та відновлення сили волосся.</p>
+
                         <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
                         <div class="product-details-content">
-                            <strong>Активні інгредієнти:</strong> алантоїн, екстракти арніки, розмарину, кропиви, шавлії, провітамін В5, ефірна олія лимона.
+                            <strong>Активні інгредієнти:</strong> алантоїн, екстракти арніки, розмарину, кропиви,
+                            шавлії, провітамін В5, ефірна олія лимона.
                         </div>
 
                         <select class="volume-selector-premium" onchange="updateProductPrice(this)">
@@ -299,7 +336,8 @@
                         </select>
 
                         <div>
-                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span class="rrp-val">1900</span> ₴</span>
+                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span
+                                    class="rrp-val">1900</span> ₴</span>
                             <div class="price-row-premium">
                                 <span class="price-current"><span class="price-val">1100</span> ₴</span>
                                 <span class="price-rrp"><span class="rrp-strike-val">1900</span> ₴</span>
@@ -319,17 +357,20 @@
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 501</div>
                         <h2 class="product-name head-font">BEARD SHAMPOO</h2>
-                        <p class="product-sub">Зволожуючий та очищуючий шампунь для бороди. Спеціальний засіб для глибокого очищення бороди та вусів.</p>
-                        
+                        <p class="product-sub">Зволожуючий та очищуючий шампунь для бороди. Спеціальний засіб для
+                            глибокого очищення бороди та вусів.</p>
+
                         <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
                         <div class="product-details-content">
-                            <strong>Активні інгредієнти:</strong> м'які ПАР, олія персикових кісточок, екстракт вівса, імбир, алое вера.
+                            <strong>Активні інгредієнти:</strong> м'які ПАР, олія персикових кісточок, екстракт вівса,
+                            імбир, алое вера.
                         </div>
 
                         <div class="single-volume-badge">250 ml</div>
 
                         <div>
-                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span class="rrp-val">1100</span> ₴</span>
+                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span
+                                    class="rrp-val">1100</span> ₴</span>
                             <div class="price-row-premium">
                                 <span class="price-current"><span class="price-val">700</span> ₴</span>
                                 <span class="price-rrp"><span class="rrp-strike-val">1100</span> ₴</span>
@@ -348,17 +389,20 @@
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 213</div>
                         <h2 class="product-name head-font">LEAVE-IN SPRAY</h2>
-                        <p class="product-sub">Мультифункціональний незмивний спрей для волосся від коренів до кінчиків. Рівномірно розпиліть і не змивайте.</p>
-                        
+                        <p class="product-sub">Мультифункціональний незмивний спрей для волосся від коренів до кінчиків.
+                            Рівномірно розпиліть і не змивайте.</p>
+
                         <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
                         <div class="product-details-content">
-                            <strong>Активні інгредієнти:</strong> Комплекс із 9 рослинних екстрактів, сік алое вера, екстракт імбиру, УФ-фільтр.
+                            <strong>Активні інгредієнти:</strong> Комплекс із 9 рослинних екстрактів, сік алое вера,
+                            екстракт імбиру, УФ-фільтр.
                         </div>
 
                         <div class="single-volume-badge">150 ml</div>
 
                         <div>
-                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span class="rrp-val">1100</span> ₴</span>
+                            <span class="price-rrp-label">Рекомендована роздрібна ціна (РРЦ): <span
+                                    class="rrp-val">1100</span> ₴</span>
                             <div class="price-row-premium">
                                 <span class="price-current"><span class="price-val">600</span> ₴</span>
                                 <span class="price-rrp"><span class="rrp-strike-val">1100</span> ₴</span>
@@ -389,11 +433,14 @@
                 </div>
                 <div>
                     <h3 class="footer-col-title head-font">Контакти</h3>
-                    <div class="footer-links" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+                    <div class="footer-links"
+                        style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
                         <span style="font-size: 14px; color: var(--text-muted);">+38 (073) 023-87-56</span>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <a href="tel:+380730238756" class="btn-outline" style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАТЕЛЕФОНУВАТИ</a>
-                            <button class="btn-outline open-contact-modal" style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАПИСАТИСЯ</button>
+                            <a href="tel:+380730238756" class="btn-outline"
+                                style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАТЕЛЕФОНУВАТИ</a>
+                            <button class="btn-outline open-contact-modal"
+                                style="padding: 10px 20px; text-align: center; font-size: 11px; display: inline-block;">ЗАПИСАТИСЯ</button>
                         </div>
                     </div>
                 </div>
@@ -447,21 +494,24 @@
                 <div class="form-group"><input type="text" placeholder="Ваше ім'я" required></div>
                 <div class="form-group"><input type="tel" placeholder="Ваш телефон" required></div>
                 <div class="form-group"><input type="date" required></div>
-                <button type="submit" class="btn-outline" style="width: 100%; border-radius: 0;">ВІДПРАВИТИ ЗАЯВКУ</button>
+                <button type="submit" class="btn-outline" style="width: 100%; border-radius: 0;">ВІДПРАВИТИ
+                    ЗАЯВКУ</button>
             </form>
         </div>
     </div>
 
     <div class="booking-bubble open-contact-modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+            <path
+                d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
         </svg>
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
     <a href="tel:+380730238756" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z"/>
+            <path
+                d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z" />
         </svg>
         <span>ЗВ'ЯЗОК</span>
     </a>
@@ -486,7 +536,7 @@
             const price = option.getAttribute('data-price');
             const rrp = option.getAttribute('data-rrp');
             const card = select.closest('.info-container-premium');
-            
+
             card.querySelector('.price-val').textContent = price;
             card.querySelector('.rrp-val').textContent = rrp;
             card.querySelector('.rrp-strike-val').textContent = rrp;
