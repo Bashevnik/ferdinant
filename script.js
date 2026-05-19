@@ -282,6 +282,36 @@ if (aboutSlider) {
     }
 }
 
+// About: right-swipe between portrait slides (keeps global background static)
+const aboutSwipe = document.querySelector('[data-about-swipe]');
+if (aboutSwipe) {
+    const swipeSlides = Array.from(aboutSwipe.querySelectorAll('.about-swipe-slide'));
+    let swipeIndex = swipeSlides.findIndex((s) => s.classList.contains('is-active'));
+    if (swipeIndex < 0) swipeIndex = 0;
+
+    swipeSlides.forEach((s, i) => {
+        s.classList.toggle('is-active', i === swipeIndex);
+        s.classList.remove('is-exiting');
+    });
+
+    if (swipeSlides.length > 1) {
+        setInterval(() => {
+            const current = swipeSlides[swipeIndex];
+            swipeIndex = (swipeIndex + 1) % swipeSlides.length;
+            const next = swipeSlides[swipeIndex];
+
+            current.classList.remove('is-active');
+            current.classList.add('is-exiting');
+
+            next.classList.add('is-active');
+
+            window.setTimeout(() => {
+                current.classList.remove('is-exiting');
+            }, 1100);
+        }, 3000);
+    }
+}
+
 // --- PREMIUM MOTION SYSTEM ---
 if (typeof gsap !== 'undefined') {
     if (typeof ScrollTrigger !== 'undefined') {
