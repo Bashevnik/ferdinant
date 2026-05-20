@@ -634,6 +634,27 @@ body.menu-open {
     opacity: 1;
 }
 
+.barber-modal .close-barber {
+    position: fixed;
+    top: 34px !important;
+    right: 4vw !important;
+    z-index: 3005 !important;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.34);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+}
+
+.barber-modal .close-barber:hover {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.58);
+}
+
 .barber-modal-img {
     width: 50%;
     height: 100vh;
@@ -2736,9 +2757,7 @@ body.menu-open {
 @media (max-width: 768px) {
     .barber-modal .close-barber {
         top: 96px !important;
-        right: 6vw !important;
-        color: rgba(0, 0, 0, 0.52);
-        mix-blend-mode: difference;
+        right: 5vw !important;
     }
 
     .barber-box.modal-content-box {
