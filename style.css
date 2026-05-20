@@ -278,7 +278,7 @@ body.menu-open {
     height: 100vh;
     background: var(--bg-color);
     z-index: 1900;
-    padding: 110px 5vw 30px;
+    padding: 132px 5vw 30px;
     display: flex;
     flex-direction: column;
     transform: translateY(-100%);
@@ -315,6 +315,7 @@ body.menu-open {
     flex-direction: column;
     gap: 30px;
     flex: 1;
+    justify-content: flex-start;
 }
 
 .mobile-nav-links a {
@@ -935,6 +936,10 @@ body.menu-open {
 
 .barber-gallery img:hover {
     filter: grayscale(0%);
+}
+
+.barber-gallery {
+    display: none;
 }
 
 /* ABOUT */
@@ -2725,5 +2730,47 @@ body.menu-open {
     .site-header>.brand-logo .logo-subtext {
         font-size: 12px !important;
         letter-spacing: 1.25px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .barber-modal .close-barber {
+        top: 96px !important;
+        right: 6vw !important;
+        color: rgba(0, 0, 0, 0.52);
+        mix-blend-mode: difference;
+    }
+
+    .barber-box.modal-content-box {
+        display: block;
+        overflow-y: auto;
+        background: #030303;
+    }
+
+    .barber-modal-img {
+        width: 100% !important;
+        height: 68svh !important;
+        min-height: 520px;
+        background-position: center top;
+    }
+
+    .barber-modal-info {
+        width: 100% !important;
+        min-height: auto;
+        padding: 26px 5vw 72px !important;
+        justify-content: flex-start;
+        background: #030303;
+    }
+
+    .barber-modal-info .barber-desc {
+        max-width: none;
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .barber-modal-info .barber-role,
+    .barber-modal-info h2,
+    .barber-gallery {
+        display: none !important;
     }
 }
