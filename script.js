@@ -1,3 +1,33 @@
+document.addEventListener('DOMContentLoaded', () => {
+    loadComponents().catch((error) => {
+        console.error(error);
+    }).finally(initPage);
+});
+
+async function loadComponents() {
+    const targets = Array.from(document.querySelectorAll('[data-include]'));
+    await Promise.all(targets.map(async (target) => {
+        const source = target.getAttribute('data-include');
+        if (!source) return;
+
+        const response = await fetch(source);
+        if (!response.ok) throw new Error(`Unable to load ${source}`);
+        target.outerHTML = await response.text();
+    }));
+
+    setActiveNavigation();
+}
+
+function setActiveNavigation() {
+    const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+
+    document.querySelectorAll('.nav-links a, .mobile-nav-links a').forEach((link) => {
+        const linkPage = (link.getAttribute('href') || '').split('/').pop().toLowerCase() || 'index.html';
+        link.classList.toggle('active', linkPage === currentPage);
+    });
+}
+
+function initPage() {
 // --- CANVAS LOGIC ---
 const canvas = document.getElementById('particle-canvas');
 if (canvas) {
@@ -176,8 +206,8 @@ if (slider && nextBtn) {
         if (isDragging) requestAnimationFrame(animateDrag);
     }
     
-    window.onresize = updateSlider;
-    window.onload = updateSlider;
+    window.addEventListener('resize', updateSlider);
+    updateSlider();
 }
 
 // --- MODAL BARBER ---
@@ -347,4 +377,5 @@ if (typeof gsap !== 'undefined') {
             });
         }
     }
+}
 }
