@@ -239,7 +239,9 @@ a {
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
-    z-index: 101;
+    z-index: 3001;
+    border: 0;
+    background: transparent;
 }
 
 .menu-toggle span {
@@ -248,6 +250,24 @@ a {
     height: 1px;
     background: var(--text-main);
     transition: var(--anim);
+    transform-origin: center;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+body.menu-open {
+    overflow: hidden;
 }
 
 .mobile-menu {
@@ -257,8 +277,8 @@ a {
     width: 100vw;
     height: 100vh;
     background: var(--bg-color);
-    z-index: 999;
-    padding: 30px 4vw;
+    z-index: 1900;
+    padding: 110px 5vw 30px;
     display: flex;
     flex-direction: column;
     transform: translateY(-100%);
@@ -2644,7 +2664,7 @@ a {
 }
 
 @media (max-width: 768px) {
-    .about-page .site-header {
+    .site-header {
         height: 78px;
         position: fixed;
         padding: 0 5vw;
@@ -2654,50 +2674,55 @@ a {
         padding-top: 0;
     }
 
-    .about-page .site-header>.brand-logo {
+    .site-header>.brand-logo {
         gap: 4px;
         max-width: calc(100vw - 116px);
     }
 
-    .about-page .site-header>.brand-logo img {
+    .site-header>.brand-logo img {
         height: 172px !important;
         margin: -46px -48px -46px -32px;
         transform: scale(1.02);
         transform-origin: center;
     }
 
-    .about-page .site-header>.brand-logo .logo-info {
+
+
+    .site-header>.brand-logo .logo-info {
         gap: 5px;
         margin-left: 10px;
     }
 
-    .about-page .site-header>.brand-logo .logo-title {
+    .site-header>.brand-logo .logo-title {
         gap: 4px;
     }
 
-    .about-page .site-header>.brand-logo .logo-text {
+    .site-header>.brand-logo .logo-text {
         font-size: 18px !important;
         letter-spacing: 1.25px !important;
     }
 
-    .about-page .site-header>.brand-logo .logo-subtext {
+
+
+
+    .site-header>.brand-logo .logo-subtext {
         font-size: 12.5px !important;
         letter-spacing: 1.45px !important;
     }
 }
 
 @media (max-width: 375px) {
-    .about-page .site-header>.brand-logo {
+    .site-header>.brand-logo {
         gap: 2px;
         max-width: calc(100vw - 96px);
     }
 
-    .about-page .site-header>.brand-logo img {
+    .site-header>.brand-logo img {
         height: 158px !important;
         margin: -44px -46px -42px -34px;
     }
 
-    .about-page .site-header>.brand-logo .logo-subtext {
+    .site-header>.brand-logo .logo-subtext {
         font-size: 12px !important;
         letter-spacing: 1.25px !important;
     }

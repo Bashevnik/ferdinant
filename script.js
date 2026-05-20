@@ -76,8 +76,23 @@ const menuToggle = document.getElementById('menuToggle');
 const closeBtn = document.getElementById('closeMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 if (menuToggle && mobileMenu) {
-    menuToggle.onclick = () => mobileMenu.classList.add('active');
-    closeBtn.onclick = () => mobileMenu.classList.remove('active');
+    const setMobileMenu = (isOpen) => {
+        mobileMenu.classList.toggle('active', isOpen);
+        menuToggle.classList.toggle('active', isOpen);
+        document.body.classList.toggle('menu-open', isOpen);
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+    };
+
+    menuToggle.setAttribute('aria-label', 'Toggle menu');
+    menuToggle.setAttribute('aria-controls', 'mobileMenu');
+    menuToggle.setAttribute('aria-expanded', 'false');
+
+    menuToggle.onclick = () => setMobileMenu(!mobileMenu.classList.contains('active'));
+    if (closeBtn) closeBtn.onclick = () => setMobileMenu(false);
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setMobileMenu(false));
+    });
 }
 
 // --- NEW PRECISION SWIPER ---
