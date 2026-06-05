@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Послуги - Ferdinand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,11 @@
         href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <meta name="theme-color" content="#050505">
 </head>
 
 <body>
@@ -21,71 +26,110 @@
 
         <main class="page-container">
             <div class="section-head">
-                <h1 class="section-title head-font">Наші Послуги</h1>
-                <span class="section-meta">02 / Прайс-лист</span>
+                <h1 class="section-title head-font">Єдиний прайс</h1>
+                <span class="section-meta">02 / Послуги</span>
             </div>
 
-            <div class="service-list">
-                <!-- Стрижки -->
-                <div class="service-row">
+            <div class="service-intro reveal-up">
+                <p>Ціни зведені в один список без дублювання по майстрах. Якщо послуга виконується на різних рівнях майстрів, показаний діапазон.</p>
+                <span>Барбер / Старший барбер / Топ барбер</span>
+            </div>
+
+            <div class="service-list service-list-premium">
+                <article class="service-row">
+                    <span class="service-index">01</span>
                     <h2 class="service-name head-font">Чоловіча стрижка</h2>
-                    <p class="service-desc">Класична або сучасна стрижка з використанням ножиць та машинки. Миття
-                        голови, підбір стайлінгу та рекомендації щодо догляду включені.</p>
-                    <span class="service-price">800 ₴</span>
-                </div>
+                    <p class="service-desc">Форма, консультація, чистий фініш і рекомендації з догляду.</p>
+                    <span class="service-price">від 500 до 1000 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Стрижка бороди та вусів</h2>
-                    <p class="service-desc">Надання форми бороді, чіткі контури небезпечною бритвою, використання
-                        преміальних масел та бальзамів.</p>
-                    <span class="service-price">500 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">02</span>
+                    <h2 class="service-name head-font">Стрижка машинкою</h2>
+                    <p class="service-desc">Акуратна коротка форма з контролем переходів і контуру.</p>
+                    <span class="service-price">від 400 до 900 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Королівське гоління</h2>
-                    <p class="service-desc">Ритуал з розпарюванням гарячим рушником, гоління небезпечною бритвою та
-                        заспокійливий догляд після.</p>
-                    <span class="service-price">600 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">03</span>
+                    <h2 class="service-name head-font">Стрижка ножицями</h2>
+                    <p class="service-desc">Точна робота з довжиною, текстурою та природною посадкою.</p>
+                    <span class="service-price">від 600 до 1200 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Комплекс: Стрижка + Борода</h2>
-                    <p class="service-desc">Повний образ від наших майстрів. Оптимальний вибір для тих, хто цінує свій
-                        час та стиль.</p>
-                    <span class="service-price">1200 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">04</span>
+                    <h2 class="service-name head-font">Стрижка наголо / Гоління голови</h2>
+                    <p class="service-desc">Рівна чиста поверхня, комфортна техніка і спокійний догляд після.</p>
+                    <span class="service-price">від 400 до 800 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Дитяча стрижка (до 12 років)</h2>
-                    <p class="service-desc">Професійний підхід до наймолодших джентльменів. Стильно, як у тата.</p>
-                    <span class="service-price">600 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">05</span>
+                    <h2 class="service-name head-font">Дитяча стрижка (до 10 років)</h2>
+                    <p class="service-desc">Стримана, зручна стрижка для молодших гостей без зайвого поспіху.</p>
+                    <span class="service-price">від 400 до 800 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Камуфлювання сивини</h2>
-                    <p class="service-desc">М'яке тонування волосся або бороди для натурального вигляду без видимого
-                        ефекту фарбування.</p>
-                    <span class="service-price">450 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">06</span>
+                    <h2 class="service-name head-font">Моделювання бороди</h2>
+                    <p class="service-desc">Форма бороди, контур і баланс з рисами обличчя.</p>
+                    <span class="service-price">від 200 до 500 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Чоловічий манікюр</h2>
-                    <p class="service-desc">Гігієнічний догляд за нігтями та шкірою рук. Акуратність — ознака успіху.
-                    </p>
-                    <span class="service-price">500 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">07</span>
+                    <h2 class="service-name head-font">Преміальне моделювання бороди</h2>
+                    <p class="service-desc">Детальніша робота з довжиною, контуром і фінішним доглядом.</p>
+                    <span class="service-price">від 400 до 600 ₴</span>
+                </article>
 
-                <div class="service-row">
-                    <h2 class="service-name head-font">Чорна маска (Black Mask)</h2>
-                    <p class="service-desc">Глибоке очищення пор обличчя від забруднень. Свіжість та чиста шкіра за один
-                        сеанс.</p>
-                    <span class="service-price">300 ₴</span>
-                </div>
+                <article class="service-row">
+                    <span class="service-index">08</span>
+                    <h2 class="service-name head-font">Камуфлювання бороди</h2>
+                    <p class="service-desc">Натуральне тонування без різкого ефекту фарбування.</p>
+                    <span class="service-price">від 400 до 600 ₴</span>
+                </article>
+
+                <article class="service-row">
+                    <span class="service-index">09</span>
+                    <h2 class="service-name head-font">Камуфлювання волосся</h2>
+                    <p class="service-desc">М'яке вирівнювання відтінку для природного, доглянутого вигляду.</p>
+                    <span class="service-price">від 500 до 1000 ₴</span>
+                </article>
+
+                <article class="service-row">
+                    <span class="service-index">10</span>
+                    <h2 class="service-name head-font">Укладання</h2>
+                    <p class="service-desc">Фінішна форма, текстура і підбір засобу під ваш тип волосся.</p>
+                    <span class="service-price">від 100 до 300 ₴</span>
+                </article>
+
+                <article class="service-row">
+                    <span class="service-index">11</span>
+                    <h2 class="service-name head-font">Скраб для шкіри голови</h2>
+                    <p class="service-desc">Очищення шкіри голови перед доглядом або стрижкою.</p>
+                    <span class="service-price">200 ₴</span>
+                </article>
+
+                <article class="service-row">
+                    <span class="service-index">12</span>
+                    <h2 class="service-name head-font">Видалення волосся на обличчі</h2>
+                    <p class="service-desc">Точне очищення небажаних зон для акуратного фінального вигляду.</p>
+                    <span class="service-price">від 50 до 100 ₴</span>
+                </article>
+
+                <article class="service-row">
+                    <span class="service-index">13</span>
+                    <h2 class="service-name head-font">Окантовка стрижки</h2>
+                    <p class="service-desc">Оновлення контуру між повними візитами.</p>
+                    <span class="service-price">від 250 до 500 ₴</span>
+                </article>
             </div>
 
-            <div style="margin-top: 60px; text-align: center;">
-                <button class="btn-outline open-contact-modal" style="padding: 20px 60px; font-size: 14px;">ЗАПИСАТИСЯ
-                    НА ОБРАНУ ПОСЛУГУ</button>
+            <div class="services-cta">
+                <button class="btn-outline open-contact-modal" type="button">ЗАПИСАТИСЯ НА ПОСЛУГУ</button>
             </div>
         </main>
 
@@ -108,9 +152,10 @@
                         style="width: 100%; padding: 15px 0; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; outline: none; margin-bottom: 30px;">
                         <option value="" disabled selected>Оберіть послугу</option>
                         <option value="cut">Чоловіча стрижка</option>
-                        <option value="beard">Стрижка бороди</option>
-                        <option value="shave">Королівське гоління</option>
-                        <option value="complex">Комплекс</option>
+                        <option value="machine">Стрижка машинкою</option>
+                        <option value="scissors">Стрижка ножицями</option>
+                        <option value="beard">Моделювання бороди</option>
+                        <option value="camouflage">Камуфлювання</option>
                     </select>
                 </div>
                 <div class="form-group"><input type="date" required></div>
@@ -127,7 +172,7 @@
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
-    <a href="tel:+380730238756" class="contact-bubble">
+    <a href="tel:+380733144009" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
             <path
                 d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 003.7.59 1 1 0 011 1V20a1 1 0 01-1 1A15 15 0 013 6a1 1 0 011-1h3.41a1 1 0 011 1 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z" />

@@ -3,12 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Барбери - Ferdinand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <meta name="theme-color" content="#050505">
     <style>
         /* Barber card photo helper — img inside card used as image source */
         .card-photo-src {
@@ -30,7 +35,7 @@
             </div>
 
             <div class="team-feature">
-                <img src="images/65_00070.jpg" alt="Наша команда FERDINAND BARBERSHOP">
+                <img src="images/65_00070.jpg" alt="Наша команда FERDINAND BARBERSHOP" loading="eager" decoding="async">
             </div>
 
             <div class="barber-slider-container">
@@ -40,7 +45,7 @@
                     <div class="card barber-card" data-name="Катя" data-title="Барбер"
                         data-photos="images/65_00053.jpg,images/65_00054.jpg,images/65_00059.jpg"
                         data-desc="Катя працює точно, спокійно і з увагою до форми. Її стрижки виглядають чисто в день візиту та легко тримаються у повсякденному ритмі.">
-                        <img class="card-photo-src" src="images/65_00053.jpg" alt="Катя">
+                        <img class="card-photo-src" src="images/65_00053.jpg" alt="Катя" loading="lazy" decoding="async">
                         <div class="card-img-bg" style="background-image: url('images/65_00053.jpg');"></div>
                         <div class="card-content">
                             <span class="card-num">01</span>
@@ -49,9 +54,8 @@
                                 <p class="card-subtitle">Барбер</p>
                                 <div class="card-meta">
                                     <span class="card-chip">Барбер</span>
-                                    <span class="card-chip">2 відгуки</span>
                                 </div>
-                                <button class="btn-outline">Детальніше</button>
+                                <button class="btn-outline" type="button">Детальніше</button>
                             </div>
                         </div>
                     </div>
@@ -60,7 +64,7 @@
                     <div class="card barber-card" data-name="Аліна" data-title="Барбер"
                         data-photos="images/65_00052.jpg"
                         data-desc="Аліна створює акуратні, сучасні образи без зайвого шуму: чистий контур, правильна довжина і комфортна консультація перед кожною послугою.">
-                        <img class="card-photo-src" src="images/65_00052.jpg" alt="Аліна">
+                        <img class="card-photo-src" src="images/65_00052.jpg" alt="Аліна" loading="lazy" decoding="async">
                         <div class="card-img-bg" style="background-image: url('images/65_00052.jpg');"></div>
                         <div class="card-content">
                             <span class="card-num">02</span>
@@ -69,9 +73,8 @@
                                 <p class="card-subtitle">Барбер</p>
                                 <div class="card-meta">
                                     <span class="card-chip">Барбер</span>
-                                    <span class="card-chip">2 відгуки</span>
                                 </div>
-                                <button class="btn-outline">Детальніше</button>
+                                <button class="btn-outline" type="button">Детальніше</button>
                             </div>
                         </div>
                     </div>
@@ -80,7 +83,7 @@
                     <div class="card barber-card" data-name="Анастасія" data-title="Старший барбер"
                         data-photos="images/65_00047.jpg,images/65_00050.jpg,images/65_00051.jpg,images/65_00046.jpg,assets/barber2.JPG"
                         data-desc="Анастасія відповідає за преміальну точність FERDINAND: виразні фейди, збалансована форма і спокійний сервіс, у якому кожна деталь має свою вагу.">
-                        <img class="card-photo-src" src="assets/barber2.JPG" alt="Анастасія">
+                        <img class="card-photo-src" src="assets/barber2.JPG" alt="Анастасія" loading="lazy" decoding="async">
                         <div class="card-img-bg" style="background-image: url('assets/barber2.JPG');"></div>
                         <div class="card-content">
                             <span class="card-num">03</span>
@@ -89,9 +92,8 @@
                                 <p class="card-subtitle">Старший барбер</p>
                                 <div class="card-meta">
                                     <span class="card-chip">Старший барбер</span>
-                                    <span class="card-chip">14 відгуків</span>
                                 </div>
-                                <button class="btn-outline">Детальніше</button>
+                                <button class="btn-outline" type="button">Детальніше</button>
                             </div>
                         </div>
                     </div>
@@ -100,7 +102,7 @@
                     <div class="card barber-card" data-name="Іра" data-title="Старший барбер"
                         data-photos="images/65_00056.jpg,images/65_00057.jpg,images/65_00058.jpg"
                         data-desc="Іра працює з характером образу: підбирає форму під риси обличчя, чисто веде машинку та доводить стрижку до впевненої фінальної лінії.">
-                        <img class="card-photo-src" src="images/65_00056.jpg" alt="Іра">
+                        <img class="card-photo-src" src="images/65_00056.jpg" alt="Іра" loading="lazy" decoding="async">
                         <div class="card-img-bg" style="background-image: url('images/65_00056.jpg');"></div>
                         <div class="card-content">
                             <span class="card-num">04</span>
@@ -109,9 +111,8 @@
                                 <p class="card-subtitle">Старший барбер</p>
                                 <div class="card-meta">
                                     <span class="card-chip">Старший барбер</span>
-                                    <span class="card-chip">36 відгуків</span>
                                 </div>
-                                <button class="btn-outline">Детальніше</button>
+                                <button class="btn-outline" type="button">Детальніше</button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +121,7 @@
                     <div class="card barber-card" data-name="Денис" data-title="Топ барбер"
                         data-photos="images/65_00039.jpg,images/65_00040.jpg,images/65_00041.jpg,images/65_00042.jpg,images/65_00044.jpg"
                         data-desc="Денис — top barber команди FERDINAND. Його робота про сильний силует, чисту геометрію, впевнений фейд і результат, який виглядає дорого без зайвих пояснень.">
-                        <img class="card-photo-src" src="images/65_00039.jpg" alt="Денис">
+                        <img class="card-photo-src" src="images/65_00039.jpg" alt="Денис" loading="lazy" decoding="async">
                         <div class="card-img-bg" style="background-image: url('images/65_00039.jpg');"></div>
                         <div class="card-content">
                             <span class="card-num">05</span>
@@ -129,9 +130,8 @@
                                 <p class="card-subtitle">Топ барбер</p>
                                 <div class="card-meta">
                                     <span class="card-chip">Топ барбер</span>
-                                    <span class="card-chip">64 відгуки</span>
                                 </div>
-                                <button class="btn-outline">Детальніше</button>
+                                <button class="btn-outline" type="button">Детальніше</button>
                             </div>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
                 <h2 class="head-font" id="bm-name"></h2>
                 <p id="bm-desc" class="barber-desc"></p>
                 <div style="margin-top: 60px;">
-                    <button class="btn-outline open-contact-modal"
+                    <button class="btn-outline open-contact-modal" type="button"
                         style="padding: 20px 60px; font-size: 14px;">ЗАПИСАТИСЯ ДО БАРБЕРА</button>
                 </div>
             </div>
@@ -190,7 +190,7 @@
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
-    <a href="tel:+380730238756" class="contact-bubble">
+    <a href="tel:+380733144009" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 003.7.59 1 1 0 011 1V20a1 1 0 01-1 1A15 15 0 013 6a1 1 0 011-1h3.41a1 1 0 011 1 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z"/>
         </svg>

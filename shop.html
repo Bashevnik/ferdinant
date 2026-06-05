@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Магазин - Ferdinand</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,11 @@
         href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <meta name="theme-color" content="#050505">
     <style>
         .product-grid-new {
             display: grid;
@@ -92,7 +97,7 @@
             transform: scale(1.04);
         }
 
-        .product-card-premium:hover .img-container-premium:has(.secondary-img) img.primary-img {
+        .product-card-premium:hover .img-container-premium.has-secondary img.primary-img {
             opacity: 0;
         }
 
@@ -216,14 +221,21 @@
                 <span class="section-meta">04 / Догляд та Стиль</span>
             </div>
 
+            <div class="shop-toolbar reveal-up">
+                <p>Оберіть продукт, об'єм і додайте його в кошик. Замовлення оформлюється без переходу на онлайн-запис.</p>
+                <button class="btn-outline cart-toggle-btn" id="openCart" type="button">
+                    КОШИК <span id="cartCount">0</span>
+                </button>
+            </div>
+
             <div class="product-grid-new">
                 <!-- Product 1: NO. 101 -->
                 <article class="product-card-premium">
                     <span class="card-badge">Bestseller</span>
-                    <div class="img-container-premium">
-                        <img src="products/65_00093.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO" class="primary-img">
+                    <div class="img-container-premium has-secondary">
+                        <img src="products/65_00093.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO" class="primary-img" loading="lazy" decoding="async">
                         <img src="products/65_00094.jpg" alt="NO. 101 NORMALIZING DAILY SHAMPOO Detail"
-                            class="secondary-img">
+                            class="secondary-img" loading="lazy" decoding="async">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 101</div>
@@ -250,17 +262,17 @@
                                 <span class="price-rrp"><span class="rrp-strike-val">800</span> ₴</span>
                             </div>
                         </div>
-                        <button class="btn-outline open-contact-modal" style="width: 100%;">КУПИТИ</button>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
                     </div>
                 </article>
 
                 <!-- Product 2: NO. 205 -->
                 <article class="product-card-premium">
                     <span class="card-badge">Premium</span>
-                    <div class="img-container-premium">
-                        <img src="products/65_00096.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT" class="primary-img">
+                    <div class="img-container-premium has-secondary">
+                        <img src="products/65_00096.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT" class="primary-img" loading="lazy" decoding="async">
                         <img src="products/65_00097.jpg" alt="NO. 205 INVIGORATING HAIR TREATMENT Detail"
-                            class="secondary-img">
+                            class="secondary-img" loading="lazy" decoding="async">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 205</div>
@@ -287,16 +299,16 @@
                                 <span class="price-rrp"><span class="rrp-strike-val">1900</span> ₴</span>
                             </div>
                         </div>
-                        <button class="btn-outline open-contact-modal" style="width: 100%;">КУПИТИ</button>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
                     </div>
                 </article>
 
                 <!-- Product 3: NO. 501 -->
                 <article class="product-card-premium">
                     <span class="card-badge">Beard Care</span>
-                    <div class="img-container-premium">
-                        <img src="products/65_00098.jpg" alt="NO. 501 BEARD SHAMPOO" class="primary-img">
-                        <img src="products/65_00099.jpg" alt="NO. 501 BEARD SHAMPOO Detail" class="secondary-img">
+                    <div class="img-container-premium has-secondary">
+                        <img src="products/65_00098.jpg" alt="NO. 501 BEARD SHAMPOO" class="primary-img" loading="lazy" decoding="async">
+                        <img src="products/65_00099.jpg" alt="NO. 501 BEARD SHAMPOO Detail" class="secondary-img" loading="lazy" decoding="async">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 501</div>
@@ -320,7 +332,7 @@
                                 <span class="price-rrp"><span class="rrp-strike-val">1100</span> ₴</span>
                             </div>
                         </div>
-                        <button class="btn-outline open-contact-modal" style="width: 100%;">КУПИТИ</button>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
                     </div>
                 </article>
 
@@ -328,7 +340,7 @@
                 <article class="product-card-premium">
                     <span class="card-badge">New</span>
                     <div class="img-container-premium">
-                        <img src="products/65_00103.jpg" alt="NO. 213 HAIR DEFINER LEAVE-IN SPRAY" class="primary-img">
+                        <img src="products/65_00103.jpg" alt="NO. 213 HAIR DEFINER LEAVE-IN SPRAY" class="primary-img" loading="lazy" decoding="async">
                     </div>
                     <div class="info-container-premium">
                         <div class="product-art">DEPOT / NO. 213</div>
@@ -352,7 +364,7 @@
                                 <span class="price-rrp"><span class="rrp-strike-val">1100</span> ₴</span>
                             </div>
                         </div>
-                        <button class="btn-outline open-contact-modal" style="width: 100%;">КУПИТИ</button>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
                     </div>
                 </article>
             </div>
@@ -379,6 +391,36 @@
         </div>
     </div>
 
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <aside class="cart-panel" id="cartPanel" aria-label="Кошик магазину">
+        <div class="cart-panel-head">
+            <div>
+                <span class="section-meta">Shop order</span>
+                <h2 class="head-font">Кошик</h2>
+            </div>
+            <button class="close-cart" id="closeCart" type="button" aria-label="Закрити кошик">&times;</button>
+        </div>
+
+        <div class="cart-items" id="cartItems"></div>
+
+        <div class="cart-empty" id="cartEmpty">Кошик порожній</div>
+
+        <div class="cart-summary">
+            <span>Разом</span>
+            <strong><span id="cartTotal">0</span> ₴</strong>
+        </div>
+
+        <form class="cart-form" id="cartForm">
+            <div class="form-group"><input type="text" name="name" placeholder="Ваше ім'я" required></div>
+            <div class="form-group"><input type="tel" name="phone" placeholder="Ваш телефон" required></div>
+            <div class="form-group"><input type="text" name="address" placeholder="Адреса доставки" required></div>
+            <div class="form-group"><textarea name="comment" placeholder="Коментар"></textarea></div>
+            <button class="btn-outline" type="submit">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+        </form>
+
+        <div class="cart-result" id="cartResult" aria-live="polite"></div>
+    </aside>
+
     <div class="booking-bubble open-contact-modal">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
             <path
@@ -387,7 +429,7 @@
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
-    <a href="tel:+380730238756" class="contact-bubble">
+    <a href="tel:+380733144009" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
             <path
                 d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z" />

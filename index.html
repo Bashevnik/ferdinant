@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Ferdinand Barbershop</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,11 @@
         href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <meta name="theme-color" content="#050505">
 </head>
 
 <body>
@@ -29,7 +34,7 @@
                     <p class="hero-desc">Преміальний чоловічий простір у Білій Церкві. Забудьте про потокові барбершопи
                         — ми створюємо естетику через бездоганну майстерність, абсолютну тишу та увагу до найменших
                         деталей.</p>
-                    <button class="btn-outline">ДЕТАЛЬНІШЕ ПРО НАС</button>
+                    <a href="about.html" class="btn-outline hero-about-link">ДЕТАЛЬНІШЕ ПРО НАС</a>
                 </div>
                 <div class="vertical-text">
                     БІЛА ЦЕРКВА, ВУЛИЦЯ ПАВЛІЧЕНКО, 28
@@ -47,16 +52,13 @@
                 loading="lazy">
             </iframe>
 
-            <div style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 10;">
-                <div
-                    style="width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 20px; color: #fff;">↑</span>
-                </div>
+            <div class="map-center-marker">
+                <span>↑</span>
             </div>
 
-            <div style="position: absolute; bottom: 40px; left: 4vw; z-index: 10; font-size: 11px; color: #fff;">
-                <div style="font-weight: 700; margin-bottom: 5px;">FERDINAND BARBERSHOP</div>
-                <div style="opacity: 0.6;">Біла Церква, вул. Павліченко, 28</div>
+            <div class="map-caption">
+                <div class="map-caption-title">FERDINAND BARBERSHOP</div>
+                <div class="map-caption-address">Біла Церква, вул. Павліченко, 28</div>
             </div>
         </section>
 
@@ -88,7 +90,7 @@
         <span>ЗАПИСАТИСЯ</span>
     </div>
 
-    <a href="tel:+380730238756" class="contact-bubble">
+    <a href="tel:+380733144009" class="contact-bubble">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
             <path
                 d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27 11.72 11.72 0 003.7.59 1 1 0 011 1V20a1 1 0 01-1 1A15 15 0 013 6a1 1 0 011-1h3.41a1 1 0 011 1 11.72 11.72 0 00.59 3.7 1 1 0 01-.27 1.11l-2.2 2.2z" />
@@ -96,6 +98,8 @@
         <span>ЗВ'ЯЗОК</span>
     </a>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
 </body>
 
