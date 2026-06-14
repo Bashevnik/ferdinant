@@ -4085,15 +4085,14 @@ body.cart-open {
 
     font-family: var(--font-head);
     font-weight: 700;
-    /* -17%: 18vw → 15vw, cap 280→235 */
-    font-size: clamp(66px, 15vw, 235px);
+    font-size: clamp(80px, 18vw, 280px);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     white-space: nowrap;
     color: #ffffff;
 
-    /* Slightly lower — 0.025 → 0.018 — more background, less texture */
-    opacity: 0.018;
+    /* 2-3% opacity — texture, not text */
+    opacity: 0.025;
 
     /* Center precisely */
     top: 50%;
@@ -4114,23 +4113,21 @@ body.cart-open {
     position: absolute;
     inset: 0;
     display: flex;
-    /* Shift bull above true center — editorial, not symmetrical */
     align-items: center;
     justify-content: center;
-    /* ~7% above center + 2% left — asymmetric campaign feel */
-    transform: translate(-2%, -7%);
     z-index: 1;
     pointer-events: none;
 }
 
 .lux-bull-ghost img {
+    /* +25% from 72vw → 90vw, cap raised from 1040px → 1300px */
     width: clamp(420px, 90vw, 1300px);
     height: auto;
     display: block;
 
-    /* +12%: 0.065 → 0.074 — bull is the dominant element */
+    /* Slightly more visible: 0.038 → 0.065 */
     filter: brightness(0) invert(1);
-    opacity: 0.074;
+    opacity: 0.065;
 
     transform-origin: center center;
 
@@ -4140,8 +4137,8 @@ body.cart-open {
 }
 
 @keyframes bullBreathe {
-    0%,  100% { transform: scale(1.00); opacity: 0.074; }
-    50%        { transform: scale(1.08); opacity: 0.10;  }
+    0%,  100% { transform: scale(1.00); opacity: 0.065; }
+    50%        { transform: scale(1.08); opacity: 0.09;  }
 }
 
 /* ─── Atmospheric overlays (stacked, z-index 2-4) ───────────── */
@@ -4344,7 +4341,7 @@ body.cart-open {
 
     /* bg-word keeps its reduced opacity even with reduced motion */
     .lux-bg-word {
-        opacity: 0.018 !important;
+        opacity: 0.025 !important;
     }
 }
 
