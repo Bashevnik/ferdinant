@@ -4043,3 +4043,252 @@ body.cart-open {
 .about-hero-slide.is-exiting {
     transform: translateX(108%) scale(1) !important;
 }
+
+
+/* =============================================================
+   LUXURY HERO — Tom Ford / Saint Laurent energy
+   Pure darkness, ghost bull, brand mark, grain atmosphere.
+   No photos. No salon clichés. One mark. Power through restraint.
+   ============================================================= */
+
+/* ─── Section shell ─────────────────────────────────────────── */
+.lux-hero {
+    position: relative;
+    width: 100%;
+    height: clamp(560px, 100svh, 100svh);
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Near-black: not pure #000, but rich graphite with warm undertone */
+    background-color: #060504;
+    border-bottom: 1px solid rgba(185, 163, 106, 0.14);
+}
+
+/* ─── Ghost bull silhouette — the room's secret ─────────────── */
+/*
+   The bull logo scaled to ~70% viewport, placed dead center,
+   filtered pure white and set to near-zero opacity.
+   Breathes once over 90 seconds. Presence without intrusion.
+*/
+.lux-bull-ghost {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.lux-bull-ghost img {
+    width: clamp(340px, 72vw, 1040px);
+    height: auto;
+    display: block;
+
+    /* White ghost — barely there */
+    filter: brightness(0) invert(1);
+    opacity: 0.038;
+
+    /* Exaggerated scale via transform to preserve opacity precision */
+    transform-origin: center center;
+
+    /* Imperceptible slow breath — 90s cycle */
+    animation: bullBreathe 90s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes bullBreathe {
+    0%,  100% { transform: scale(1.00); opacity: 0.038; }
+    50%        { transform: scale(1.06); opacity: 0.055; }
+}
+
+/* ─── Atmospheric overlays (stacked, z-index 2-4) ───────────── */
+
+/* 1. Edge vignette — pulls focus to center like a spotlight */
+.lux-overlay-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 80% 80% at 50% 50%,
+        transparent 20%,
+        rgba(4, 3, 2, 0.60) 70%,
+        rgba(4, 3, 2, 0.92) 100%
+    );
+}
+
+/* 2. Film grain texture — the luxury tactile layer */
+.lux-overlay-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.48;
+    /* SVG fractal noise grain — no external file needed */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+}
+
+/* 3. Warm amber radial — subtle warmth around the logo, like candlelight */
+.lux-overlay-radial {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 55% 55% at 50% 50%,
+        rgba(185, 163, 106, 0.045) 0%,
+        transparent 70%
+    );
+}
+
+/* ─── Foreground brand mark ──────────────────────────────────── */
+.lux-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+
+    /* Staggered entrance — each child animates in sequence */
+    opacity: 0;
+    animation: luxFadeUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes luxFadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Foreground logo — crisp, confident, mid-size */
+.lux-logo {
+    width: clamp(88px, 10vw, 148px);
+    height: auto;
+    display: block;
+
+    /* White — cuts through the darkness */
+    filter: brightness(0) invert(1)
+            drop-shadow(0 0 40px rgba(185, 163, 106, 0.22));
+
+    opacity: 0;
+    animation: luxFadeUp 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+/* Gold hairline rule */
+.lux-rule {
+    width: clamp(48px, 6vw, 96px);
+    height: 1px;
+    margin: clamp(20px, 2.8vw, 36px) 0 clamp(18px, 2.4vw, 30px);
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(185, 163, 106, 0.9) 50%,
+        transparent 100%
+    );
+    opacity: 0;
+    animation: luxFadeIn 1.4s ease 0.75s forwards;
+}
+
+@keyframes luxFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* FERDINAND wordmark — architecturally spaced, not screamed */
+.lux-wordmark {
+    font-family: var(--font-head);
+    font-weight: 300;
+    font-size: clamp(18px, 2.2vw, 34px);
+    letter-spacing: 0.62em;
+    padding-left: 0.62em; /* compensate for letter-spacing indent */
+    text-transform: uppercase;
+    color: rgba(252, 252, 252, 0.95);
+    line-height: 1;
+    margin: 0;
+
+    opacity: 0;
+    animation: luxFadeUp 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards;
+}
+
+/* Sub-label — accent gold, minimal */
+.lux-sub {
+    margin-top: clamp(12px, 1.4vw, 18px);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(9px, 0.85vw, 11px);
+    letter-spacing: 0.30em;
+    text-transform: uppercase;
+    color: rgba(185, 163, 106, 0.75);
+    line-height: 1;
+
+    opacity: 0;
+    animation: luxFadeIn 1.4s ease 1.2s forwards;
+}
+
+/* ─── Corner metadata — geo + heritage ──────────────────────── */
+/*
+   Tom Ford / Bentley device: minimal factual text in a corner.
+   Not decorative. Just precise. Like a watch bezel inscription.
+*/
+.lux-coord {
+    position: absolute;
+    z-index: 10;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(8px, 0.7vw, 10px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(185, 163, 106, 0.38);
+    line-height: 1;
+    bottom: clamp(24px, 3.5vw, 40px);
+
+    opacity: 0;
+    animation: luxFadeIn 1.2s ease 1.6s forwards;
+}
+
+.lux-coord--bl { left:  clamp(24px, 3.5vw, 48px); }
+.lux-coord--br { right: clamp(24px, 3.5vw, 48px); }
+
+/* ─── Mobile adaptations ─────────────────────────────────────── */
+@media (max-width: 640px) {
+    .lux-hero {
+        height: 100svh;
+        min-height: 500px;
+    }
+
+    .lux-bull-ghost img {
+        width: 90vw;
+    }
+
+    .lux-wordmark {
+        font-size: clamp(14px, 5vw, 22px);
+        letter-spacing: 0.42em;
+        padding-left: 0.42em;
+    }
+
+    .lux-coord {
+        display: none; /* clean on small screens */
+    }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .lux-bull-ghost img,
+    .lux-content,
+    .lux-logo,
+    .lux-rule,
+    .lux-wordmark,
+    .lux-sub,
+    .lux-coord {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
