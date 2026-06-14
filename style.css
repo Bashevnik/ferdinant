@@ -3933,3 +3933,51 @@ body.cart-open {
         gap: clamp(18px, 1vw, 28px);
     }
 }
+
+/* Custom Redesigned About Hero Block */
+.about-hero-content-new {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: center;
+    animation: fadeInHero 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.about-hero-logo {
+    width: clamp(120px, 18vw, 240px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.85));
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-hero-logo:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.about-hero-title-new {
+    font-family: var(--font-head);
+    font-size: clamp(54px, 8.5vw, 120px);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--text-main);
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    padding-left: 0.22em;
+    line-height: 1;
+    margin: 0;
+}
+
+@keyframes fadeInHero {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
