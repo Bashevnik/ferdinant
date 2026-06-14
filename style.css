@@ -3934,7 +3934,7 @@ body.cart-open {
     }
 }
 
-/* Custom Redesigned About Hero Block */
+/* --- ABOUT HERO: Premium Cinematic Block --- */
 .about-hero-content-new {
     position: relative;
     z-index: 2;
@@ -3942,42 +3942,104 @@ body.cart-open {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 0;
     text-align: center;
-    animation: fadeInHero 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    animation: aboutHeroIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
 }
 
+/* Massive bull — the main visual event */
 .about-hero-logo {
-    width: clamp(120px, 18vw, 240px);
+    width: clamp(180px, 30vw, 480px);
     height: auto;
     display: block;
-    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.85));
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    filter:
+        brightness(0) invert(1)
+        drop-shadow(0 0 60px rgba(185, 163, 106, 0.18))
+        drop-shadow(0 30px 80px rgba(0, 0, 0, 0.9));
+    transform-origin: center bottom;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.6s ease;
+    animation: logoFloat 6s ease-in-out infinite;
+    will-change: transform;
 }
 
 .about-hero-logo:hover {
-    transform: scale(1.05) rotate(2deg);
+    filter:
+        brightness(0) invert(1)
+        drop-shadow(0 0 80px rgba(185, 163, 106, 0.35))
+        drop-shadow(0 30px 80px rgba(0, 0, 0, 0.9));
+    transform: scale(1.04);
+    animation-play-state: paused;
 }
 
+/* Gold divider line between logo and wordmark */
+.about-hero-divider {
+    width: clamp(60px, 8vw, 120px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: clamp(18px, 2.5vw, 32px) 0;
+    opacity: 0;
+    animation: aboutHeroIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+/* FERDINAND wordmark — restrained, spaced, refined */
 .about-hero-title-new {
     font-family: var(--font-head);
-    font-size: clamp(54px, 8.5vw, 120px);
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    color: var(--text-main);
-    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
-    padding-left: 0.22em;
+    font-size: clamp(20px, 2.8vw, 40px);
+    font-weight: 400;
+    letter-spacing: 0.55em;
+    padding-left: 0.55em;
+    color: rgba(252, 252, 252, 0.92);
+    text-shadow: none;
     line-height: 1;
     margin: 0;
+    opacity: 0;
+    animation: aboutHeroIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
 }
 
-@keyframes fadeInHero {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Sub-label under the wordmark */
+.about-hero-sub {
+    margin-top: clamp(10px, 1.2vw, 16px);
+    font-size: clamp(9px, 1vw, 11px);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-weight: 400;
+    opacity: 0;
+    animation: aboutHeroIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards;
+}
+
+/* Entrance */
+@keyframes aboutHeroIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle breathing float on the bull */
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px);   }
+    50%       { transform: translateY(-10px); }
+}
+
+/* Deeper, heavier overlay for the about hero specifically */
+.about-hero-static .about-hero-overlay {
+    background:
+        radial-gradient(ellipse 120% 80% at 50% 0%, rgba(5,5,5,0.12), rgba(0,0,0,0)),
+        linear-gradient(180deg,
+            rgba(5,5,5,0.55) 0%,
+            rgba(5,5,5,0.25) 40%,
+            rgba(5,5,5,0.65) 100%
+        );
+}
+
+/* Slide background: slight zoom-in on active slide for cinematic feel */
+.about-hero-slide.is-active {
+    transform: translateX(0) scale(1.04) !important;
+    transition: transform 1.7s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.85s ease !important;
+}
+.about-hero-slide.is-exiting {
+    transform: translateX(108%) scale(1) !important;
 }
