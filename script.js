@@ -698,17 +698,38 @@ function initShopCart() {
         ].join('\n');
 
         try {
-            await navigator.clipboard.writeText(orderText);
-        } catch {
-            // Clipboard can be blocked by browser permissions; the order stays visible in the form state.
-        }
+            if (resultNode) resultNode.innerHTML = '<p>Відправляємо замовлення...</p>';
 
-        if (resultNode) {
-            resultNode.innerHTML = `
-                <p>Замовлення підготовлено. Автоматична відправка власнику потребує backend, n8n, Telegram Bot API або serverless-функції.</p>
-                <p>Текст замовлення скопійовано, якщо браузер дозволив доступ до буфера.</p>
-                <a href="https://t.me/AlexBashevnik" target="_blank" rel="noopener">Відкрити Telegram</a>
-            `;
+            // Вкажіть тут URL вашого Railway бекенду після деплою
+            const backendUrl = 'https://ferdinand-backend.up.railway.app/order';
+            
+            const response = await fetch(backendUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: orderText })
+            });
+
+            if (response.ok) {
+                cart = [];
+                save();
+                render();
+                form.reset();
+                if (resultNode) resultNode.innerHTML = '<p style="color: #2ecc71; margin-top: 15px;">Замовлення успішно відправлено! Ми зв\'яжемося з вами найближчим часом.</p>';
+            } else {
+                throw new Error('Помилка сервера');
+            }
+        } catch (err) {
+            console.error('Помилка відправки:', err);
+            try {
+                await navigator.clipboard.writeText(orderText);
+            } catch {}
+            
+            if (resultNode) {
+                resultNode.innerHTML = `
+                    <p style="color: #e74c3c; margin-top: 15px;">Сталася помилка при відправці. Текст замовлення скопійовано.</p>
+                    <a href="https://t.me/AlexBashevnik" target="_blank" rel="noopener" style="color: var(--text-main); text-decoration: underline;">Відправити вручну в Telegram</a>
+                `;
+            }
         }
     });
 
