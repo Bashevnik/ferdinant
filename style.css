@@ -4055,8 +4055,9 @@ body.cart-open {
 .lux-hero {
     position: relative;
     width: 100%;
-    height: clamp(560px, 100svh, 100svh);
-    min-height: 560px;
+    /* 85svh: leaves ~15vh of next section visible on desktop */
+    height: clamp(500px, 85svh, 85svh);
+    min-height: 500px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -4064,7 +4065,42 @@ body.cart-open {
 
     /* Near-black: not pure #000, but rich graphite with warm undertone */
     background-color: #060504;
-    border-bottom: 1px solid rgba(185, 163, 106, 0.14);
+
+    /* Fade bottom into next section — no hard cut */
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+/* ─── Ultra-low-opacity background wordmark ─────────────────── */
+/*
+   FERDINAND at ~18-20vw font size sits behind the bull at 2-3% opacity.
+   It reads as a texture, not text. Like a watermark in luxury paper.
+   The bull sits on top of it, anchoring the brand field.
+*/
+.lux-bg-word {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: clamp(80px, 18vw, 280px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #ffffff;
+
+    /* 2-3% opacity — texture, not text */
+    opacity: 0.025;
+
+    /* Center precisely */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* No animation — completely still, anchored */
+    will-change: auto;
 }
 
 /* ─── Ghost bull silhouette — the room's secret ─────────────── */
@@ -4084,25 +4120,25 @@ body.cart-open {
 }
 
 .lux-bull-ghost img {
-    width: clamp(340px, 72vw, 1040px);
+    /* +25% from 72vw → 90vw, cap raised from 1040px → 1300px */
+    width: clamp(420px, 90vw, 1300px);
     height: auto;
     display: block;
 
-    /* White ghost — barely there */
+    /* Slightly more visible: 0.038 → 0.065 */
     filter: brightness(0) invert(1);
-    opacity: 0.038;
+    opacity: 0.065;
 
-    /* Exaggerated scale via transform to preserve opacity precision */
     transform-origin: center center;
 
-    /* Imperceptible slow breath — 90s cycle */
+    /* Slow breath — 90s */
     animation: bullBreathe 90s ease-in-out infinite;
     will-change: transform, opacity;
 }
 
 @keyframes bullBreathe {
-    0%,  100% { transform: scale(1.00); opacity: 0.038; }
-    50%        { transform: scale(1.06); opacity: 0.055; }
+    0%,  100% { transform: scale(1.00); opacity: 0.065; }
+    50%        { transform: scale(1.08); opacity: 0.09;  }
 }
 
 /* ─── Atmospheric overlays (stacked, z-index 2-4) ───────────── */
@@ -4113,12 +4149,20 @@ body.cart-open {
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    background: radial-gradient(
-        ellipse 80% 80% at 50% 50%,
-        transparent 20%,
-        rgba(4, 3, 2, 0.60) 70%,
-        rgba(4, 3, 2, 0.92) 100%
-    );
+    background:
+        /* Edge vignette */
+        radial-gradient(
+            ellipse 90% 90% at 50% 50%,
+            transparent 25%,
+            rgba(4, 3, 2, 0.50) 68%,
+            rgba(4, 3, 2, 0.88) 100%
+        ),
+        /* Extra depth at bottom — leads eye downward */
+        linear-gradient(
+            to bottom,
+            transparent 50%,
+            rgba(4, 3, 2, 0.55) 100%
+        );
 }
 
 /* 2. Film grain texture — the luxury tactile layer */
@@ -4141,10 +4185,12 @@ body.cart-open {
     inset: 0;
     z-index: 2;
     pointer-events: none;
+    /* Wider, warmer glow — more depth around the bull */
     background: radial-gradient(
-        ellipse 55% 55% at 50% 50%,
-        rgba(185, 163, 106, 0.045) 0%,
-        transparent 70%
+        ellipse 70% 65% at 50% 48%,
+        rgba(185, 163, 106, 0.07) 0%,
+        rgba(185, 163, 106, 0.02) 50%,
+        transparent 75%
     );
 }
 
@@ -4258,12 +4304,13 @@ body.cart-open {
 /* ─── Mobile adaptations ─────────────────────────────────────── */
 @media (max-width: 640px) {
     .lux-hero {
-        height: 100svh;
-        min-height: 500px;
+        /* On mobile show ~85svh so next section peeks */
+        height: 85svh;
+        min-height: 460px;
     }
 
     .lux-bull-ghost img {
-        width: 90vw;
+        width: 110vw;
     }
 
     .lux-wordmark {
@@ -4273,7 +4320,7 @@ body.cart-open {
     }
 
     .lux-coord {
-        display: none; /* clean on small screens */
+        display: none;
     }
 }
 
@@ -4285,10 +4332,16 @@ body.cart-open {
     .lux-rule,
     .lux-wordmark,
     .lux-sub,
-    .lux-coord {
+    .lux-coord,
+    .lux-bg-word {
         animation: none !important;
         opacity: 1 !important;
         transform: none !important;
+    }
+
+    /* bg-word keeps its reduced opacity even with reduced motion */
+    .lux-bg-word {
+        opacity: 0.025 !important;
     }
 }
 
