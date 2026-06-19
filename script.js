@@ -700,8 +700,8 @@ function initShopCart() {
         try {
             if (resultNode) resultNode.innerHTML = '<p>Відправляємо замовлення...</p>';
 
-            // Вкажіть тут URL вашого Railway бекенду після деплою
-            const backendUrl = 'https://ferdinand-backend.up.railway.app/order';
+            // Telegram-сповіщення про замовлення (Vercel serverless function)
+            const backendUrl = 'https://vercel-backend-seven-swart.vercel.app/api/order';
             
             const response = await fetch(backendUrl, {
                 method: 'POST',

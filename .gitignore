@@ -5,3 +5,13 @@ Thumbs.db
 *.tmp
 *.ARW
 *.arw
+
+# Secrets & deploy
+.env
+.env.*
+.vercel
+
+# Local scratch / unrelated
+qa-screenshots/
+_skills-main/
+skills-main.zip

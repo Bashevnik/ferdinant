@@ -1,0 +1,6 @@
+{
+  "name": "ferdinand-tg-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Telegram order-notification endpoint for the Ferdinand shop (Vercel serverless)."
+}

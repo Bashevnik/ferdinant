@@ -72,12 +72,23 @@
             aspect-ratio: 1/1;
             overflow: hidden;
             border-bottom: 1px solid var(--border);
+            /* Clean product tile — full product always visible on white */
+            background: #ffffff;
+        }
+
+        /* For photos shot on a dark background (e.g. the Perfomen set):
+           keep a dark tile so the letterboxing blends seamlessly */
+        .img-container-premium.img-dark {
+            background: #0b0b0b;
         }
 
         .img-container-premium img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            /* contain = never crop the bottle/cap; show the whole product */
+            object-fit: contain;
+            padding: 18px;
+            box-sizing: border-box;
             transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -229,7 +240,477 @@
             </div>
 
             <div class="product-grid-new">
-                <!-- Товари будуть додані сюди -->
+                <!-- 1. DEPOT NO. 106 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/1.jpg" alt="DEPOT NO. 106 Dandruff Control Intensive Cream Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 106</div>
+                        <h2 class="product-name head-font">DANDRUFF CONTROL CREAM SHAMPOO</h2>
+                        <p class="product-sub">Крем-шампунь інтенсивної дії для шкіри голови проти лупи.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Розроблений на основі спеціальних інгредієнтів, які протидіють неприємним проявам лупи. Має ефективну специфічну та м'яку збалансовану очищувальну дію.</p>
+                            <p><strong>Активні інгредієнти:</strong> піроктон оламін, делікатні ПАР, рослинний комплекс, алантоїн, екстракти арніки, розмарину, кропиви, шавлії та апельсина, провітамін В5, сорбіт, ефірна олія лимона.</p>
+                            <p><strong>Використання:</strong> рівномірно розподілити по шкірі голови за допомогою ковпачка-аплікатора і спінити круговими рухами. Залиште на 2-3 хвилини, щоб активні компоненти подіяли, а потім змийте.</p>
+                        </div>
+                        <div class="single-volume-badge">125 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1200</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 2. DEPOT NO. 102 (250 ml) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/2.jpg" alt="DEPOT NO. 102 Anti-Dandruff & Sebum Control Shampoo 250 ml" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 102</div>
+                        <h2 class="product-name head-font">ANTI-DANDRUFF &amp; SEBUM SHAMPOO</h2>
+                        <p class="product-sub">Шампунь від лупи та для жирної шкіри голови і волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Протидіє появі лупи та зменшує надлишок шкірного себуму, відновлюючи баланс шкіри голови та волосся. Формула з делікатними поверхнево-активними речовинами.</p>
+                            <p><strong>Активні інгредієнти:</strong> піроктон оламін, делікатна поверхнево-активна речовина, рослинний комплекс, силікат магнію та алюмінію, алантоїн, ефірна олія розмарину, ефірна олія шавлії, евкаліптол, ментол.</p>
+                            <p><strong>Використання:</strong> нанести на вологе волосся і спінити. Залишити на кілька хвилин для посилення дії, потім змити. При необхідності повторити.</p>
+                        </div>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1600</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 3. DEPOT NO. 202 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/3.jpg" alt="DEPOT NO. 202 Complete Leave-In Conditioner" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 202</div>
+                        <h2 class="product-name head-font">COMPLETE LEAVE-IN CONDITIONER</h2>
+                        <p class="product-sub">Мультифункціональний leave-in догляд.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Унікальний незмивний засіб з багатьма корисними властивостями. Після нанесення кількох крапель на волосся: зволожує, кондиціонує, захищає та надає волоссю природний контроль. Також рекомендується для догляду за бородою.</p>
+                            <p><strong>Активні інгредієнти:</strong> рослинний комплекс, кондиціонери, силіконові пом'якшувачі, УФ-фільтр.</p>
+                            <p><strong>Використання:</strong> нанести помірну кількість засобу на руки, залежно від довжини та густоти волосся. Нанести безпосередньо на чисте вологе волосся. Не змивати і приступати до укладання.</p>
+                        </div>
+                        <div class="single-volume-badge">100 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">850</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 4. DEPOT NO. 102 (1000 ml) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/4.jpg" alt="DEPOT NO. 102 Anti-Dandruff & Sebum Control Shampoo 1000 ml" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 102</div>
+                        <h2 class="product-name head-font">ANTI-DANDRUFF &amp; SEBUM SHAMPOO</h2>
+                        <p class="product-sub">Шампунь від лупи та для жирної шкіри голови і волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Протидіє появі лупи та зменшує надлишок шкірного себуму, відновлюючи баланс шкіри голови та волосся. Формула з делікатними поверхнево-активними речовинами.</p>
+                            <p><strong>Активні інгредієнти:</strong> піроктон оламін, делікатна поверхнево-активна речовина, рослинний комплекс, силікат магнію та алюмінію, алантоїн, ефірна олія розмарину, ефірна олія шавлії, евкаліптол, ментол.</p>
+                            <p><strong>Використання:</strong> нанести на вологе волосся і спінити. Залишити на кілька хвилин для посилення дії, потім змити. При необхідності повторити.</p>
+                        </div>
+                        <div class="single-volume-badge">1000 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">3000</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 5. DEPOT NO. 407 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/5.jpg" alt="DEPOT NO. 407 Restoring Aftershave" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 407</div>
+                        <h2 class="product-name head-font">RESTORING AFTERSHAVE</h2>
+                        <p class="product-sub">Відновлювальний та освіжаючий лосьйон після гоління.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>З низьким вмістом спирту та тонізуючою формулою дарує свіжість, зволоження та тривале відчуття гарного самопочуття.</p>
+                            <p><strong>Активні інгредієнти:</strong> бісаболол, провітамін B5, гліцерин, алантоїн.</p>
+                            <p><strong>Використання:</strong> розпилюйте або наносьте постукуванням на сухе обличчя після гоління або за потреби протягом дня.</p>
+                        </div>
+                        <div class="single-volume-badge">500 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1700</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 6. DEPOT NO. 101 (1000 ml, + 250 ml hover) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium has-secondary">
+                        <img src="new-products-images/6.jpg" alt="DEPOT NO. 101 Normalizing Daily Shampoo 1000 ml" class="primary-img" loading="lazy" decoding="async">
+                        <img src="new-products-images/7.jpg" alt="DEPOT NO. 101 Normalizing Daily Shampoo 250 ml" class="secondary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 101</div>
+                        <h2 class="product-name head-font">NORMALIZING DAILY SHAMPOO</h2>
+                        <p class="product-sub">Нормалізуючий тонізуючий шампунь для нормального волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Ідеально підходить для щоденного використання. Сформований з делікатними поверхнево-активними речовинами. Має глибоку очищувальну, тонізуючу та освіжаючу дію на волосся та шкіри голови.</p>
+                            <p><strong>Активні інгредієнти:</strong> делікатні ПАР, рослинний комплекс, провітамін B5, ефірна олія шавлії, евкаліптол.</p>
+                            <p><strong>Використання:</strong> нанести на вологе волосся і спінити. Залиште на кілька хвилин, щоб відчути свіжість, а потім змийте. За потреби повторіть процедуру та нанесіть кондиціонер.</p>
+                        </div>
+                        <div class="single-volume-badge">1000 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">2150</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 7. DEPOT NO. 301 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/8.jpg" alt="DEPOT NO. 301 Matt Paste" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 301</div>
+                        <h2 class="product-name head-font">MATT PASTE</h2>
+                        <p class="product-sub">Паста/помадка для сильної фіксації з матовим ефектом.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Забезпечує контроль і чіткість завдяки матовому ефекту, надаючи тривалу стійкість будь-якій укладці.</p>
+                            <p><strong>Активні інгредієнти:</strong> матуючий віск натурального походження, рослинний комплекс, екстракт листа чорного чаю, соняшникова олія.</p>
+                            <p><strong>Використання:</strong> візьміть невелику кількість засобу, розітріть його руками і розподіліть по волоссю під час укладання.</p>
+                        </div>
+                        <div class="single-volume-badge">75 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1100</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 8. DEPOT NO. 105 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/9.jpg" alt="DEPOT NO. 105 Invigorating Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 105</div>
+                        <h2 class="product-name head-font">INVIGORATING SHAMPOO</h2>
+                        <p class="product-sub">Шампунь, який бадьорить, для тонкого волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>М'яко очищає волосся, зберігаючи природний баланс волосся та шкіри голови. Особливо підходить для ослабленого, тонкого волосся, яке втратило свою силу. Формула з делікатними поверхнево-активними речовинами.</p>
+                            <p><strong>Активні інгредієнти:</strong> делікатні поверхнево-активні речовини, екстракт індійського дерева кіно, специфічний ботанічний комплекс, полівітамінний комплекс (B5, B6, C, E і PP), евкаліптол, сорбітол і гліцерин.</p>
+                            <p><strong>Використання:</strong> нанести на вологе волосся і спінити. Змийте і повторіть за необхідності. Для синергетичної підбадьорливої дії продовжуйте з NO. 205 Invigorating Treatment.</p>
+                        </div>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">500</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 9. DEPOT NO. 108 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/10.jpg" alt="DEPOT NO. 108 Detoxifying Charcoal Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 108</div>
+                        <h2 class="product-name head-font">DETOXIFYING SHAMPOO</h2>
+                        <p class="product-sub">Шампунь для глибокого очищення з деревним вугіллям.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Інгредієнти дозволяють йому працювати глибоко, протидіючи наслідкам забруднення та накопиченню солі та мінералів.</p>
+                            <p><strong>Активні інгредієнти:</strong> комплекс з екстрактами яблука, лимона, винограду та пшеничних висівок, евкаліптол, вугілля, спіруліна.</p>
+                            <p><strong>Використання:</strong> нанесіть на вологе волосся та помасажуйте. Залиште на 2-3 хвилини, щоб активні інгредієнти подіяли, а потім змийте. При необхідності повторіть.</p>
+                        </div>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1500</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 10. DEPOT NO. 501 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/11.jpg" alt="DEPOT NO. 501 Moisturizing & Clarifying Beard Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 501</div>
+                        <h2 class="product-name head-font">BEARD SHAMPOO</h2>
+                        <p class="product-sub">Спеціальний очищувальний та зволожувальний шампунь для бороди.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Формула містить делікатні поверхнево-активні речовини. Очищує та зволожує волосся на обличчі, водночас допомагаючи підтримувати та подовжувати бороду. Рекомендовано для щоденного використання.</p>
+                            <p><strong>Активні інгредієнти:</strong> делікатні ПАР, ефірна олія м'яти, екстракт алое вера, провітамін B5.</p>
+                            <p><strong>Використання:</strong> нанести на вологу бороду, спінити і добре змити. Для додання м'якості та контролю нанесіть спеціальний кондиціонер.</p>
+                        </div>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1100</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 11. DEPOT NO. 201 (250 ml) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/12.jpg" alt="DEPOT NO. 201 Refreshing Conditioner 250 ml" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 201</div>
+                        <h2 class="product-name head-font">REFRESHING CONDITIONER</h2>
+                        <p class="product-sub">Тонізуючий та зволожуючий кондиціонер для шкіри голови та волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Має бальзамічну, зволожуючу, тонізуючу та освіжаючу дію на волосся та шкіри голови. Надає волоссю м'якість і пружність, запобігаючи утворенню статичної електризації та пухнастості.</p>
+                            <p><strong>Активні інгредієнти:</strong> рисова олія, евкаліптол, провітамін B5, рослинний комплекс, ефірна олія розмарину, ефірна олія лимону.</p>
+                            <p><strong>Використання:</strong> нанести на чисте вологе волосся. Спіньте шкіру голови та волосся. Залишити на кілька хвилин, потім ретельно змити.</p>
+                        </div>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1000</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 12. DEPOT NO. 213 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/13.jpg" alt="DEPOT NO. 213 Hair Definer Leave-In Spray" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 213</div>
+                        <h2 class="product-name head-font">HAIR DEFINER LEAVE-IN SPRAY</h2>
+                        <p class="product-sub">Незмивний спрей для текстурування та контролю волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Багатофункціональний засіб у формі спрею для кондиціонування та моделювання волосся без обтяження. Полегшує розчісування, надає легку текстуру, природний об'єм та чіткість пасмам. Захищає волосся від втрати вологи та негативних зовнішніх факторів.</p>
+                            <p><strong>Активні інгредієнти:</strong> рослинний комплекс, кондиціонуючі агенти, термозахисні компоненти, силіконові полімери, УФ-фільтр.</p>
+                            <p><strong>Використання:</strong> рівномірно розпилити на чисте вологе або сухе волосся. Розподілити за допомогою гребінця або руками. Не змивати і приступати до укладання.</p>
+                        </div>
+                        <div class="single-volume-badge">150 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">900</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 13. DEPOT NO. 201 (1000 ml) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/14.jpg" alt="DEPOT NO. 201 Refreshing Conditioner 1000 ml" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">DEPOT / NO. 201</div>
+                        <h2 class="product-name head-font">REFRESHING CONDITIONER</h2>
+                        <p class="product-sub">Тонізуючий та зволожуючий кондиціонер для шкіри голови та волосся.</p>
+                        <div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                        <div class="product-details-content">
+                            <p>Має бальзамічну, зволожуючу, тонізуючу та освіжаючу дію на волосся та шкіри голови. Надає волоссю м'якість і пружність, запобігаючи утворенню статичної електризації та пухнастості.</p>
+                            <p><strong>Активні інгредієнти:</strong> рисова олія, евкаліптол, провітамін B5, рослинний комплекс, ефірна олія розмарину, ефірна олія лимону.</p>
+                            <p><strong>Використання:</strong> нанести на чисте вологе волосся. Спіньте шкіру голови та волосся. Залишити на кілька хвилин, потім ретельно змити.</p>
+                        </div>
+                        <div class="single-volume-badge">1000 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">2000</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 14. PREP / PRORASO shaving foam (2 photos) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium has-secondary">
+                        <img src="new-products-images/15.jpg" alt="PREP Dermoprotettiva shaving foam" class="primary-img" loading="lazy" decoding="async">
+                        <img src="new-products-images/15.1.jpg" alt="Proraso Rinfrescante shaving foam" class="secondary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">PREP / PRORASO</div>
+                        <h2 class="product-name head-font">ПІНА ДЛЯ ГОЛІННЯ</h2>
+                        <p class="product-sub">Захисна піна для гоління — Prep або Proraso, на вибір.</p>
+                        <div class="single-volume-badge">Prep / Proraso</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">80</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 15. INSIGHT Clarifying -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/16.jpg" alt="Insight Clarifying Purifying Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">INSIGHT</div>
+                        <h2 class="product-name head-font">CLARIFYING SHAMPOO</h2>
+                        <p class="product-sub">Очищувальний шампунь з екстрактом розмарину для глибокого очищення волосся та шкіри голови.</p>
+                        <div class="single-volume-badge">990 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1200</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 16. PREP -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/17.jpg" alt="PREP Crema Dermoprotettiva" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">PREP</div>
+                        <h2 class="product-name head-font">ПІНА ДЛЯ ГОЛІННЯ PREP</h2>
+                        <p class="product-sub">Класичний дерматозахисний засіб Prep для комфортного гоління без подразнень.</p>
+                        <div class="single-volume-badge">Prep</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">260</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 17. INSIGHT Energizzante -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/18.jpg" alt="Insight Shampoo Energizzante" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">INSIGHT</div>
+                        <h2 class="product-name head-font">SHAMPOO ENERGIZZANTE</h2>
+                        <p class="product-sub">Енергетичний шампунь з екстрактом лимона для щоденного використання.</p>
+                        <div class="single-volume-badge">900 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1200</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 18. LUXINA Purify Mask -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/19.jpg" alt="Luxina Purify Mask Scrub Pre Shampoo" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">LUXINA</div>
+                        <h2 class="product-name head-font">PURIFY MASK</h2>
+                        <p class="product-sub">Скраб-маска перед шампунем для глибокого очищення волосся та шкіри голови.</p>
+                        <div class="single-volume-badge">250 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">1000</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 19. ї'13 -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/21.jpg" alt="ї'13 естет шампунь для щоденного використання" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">ї'13 ЕСТЕТ</div>
+                        <h2 class="product-name head-font">ШАМПУНЬ ЩОДЕННИЙ</h2>
+                        <p class="product-sub">Шампунь для щоденного використання — догляд «з характером».</p>
+                        <div class="single-volume-badge">400 ml</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">500</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 20. PERFOMEN набір -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium img-dark">
+                        <img src="new-products-images/22.jpg" alt="Perfomen Grooming Co. набір для догляду за бородою" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">PERFOMEN</div>
+                        <h2 class="product-name head-font">ПОДАРУНКОВИЙ НАБІР</h2>
+                        <p class="product-sub">Набір Perfomen Grooming Co. для догляду за бородою.</p>
+                        <div class="single-volume-badge">Набір</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">650</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 21. NISHMAN Powder (2 photos) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium has-secondary">
+                        <img src="new-products-images/23.jpg" alt="Nishman P1 Powder Styling Mattifying Volume Powder" class="primary-img" loading="lazy" decoding="async">
+                        <img src="new-products-images/23.1.jpg" alt="Nishman P1 GumGum Mattifying Volume Powder" class="secondary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">NISHMAN</div>
+                        <h2 class="product-name head-font">ПУДРА ДЛЯ ОБ'ЄМУ</h2>
+                        <p class="product-sub">Пудра для матового об'єму та фіксації, легкий контроль укладки.</p>
+                        <div class="single-volume-badge">Powder styling</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">400</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 22. PERFOMEN Daily Shampoo (великий) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/24.1.jpg" alt="Perfomen shampoo великий" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">PERFOMEN</div>
+                        <h2 class="product-name head-font">DAILY SHAMPOO · ВЕЛИКИЙ</h2>
+                        <p class="product-sub">Шампунь для щоденного використання Perfomen, великий об'єм.</p>
+                        <div class="single-volume-badge">Великий</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">450</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
+
+                <!-- 23. PERFOMEN Daily Shampoo (малий) -->
+                <article class="product-card-premium">
+                    <div class="img-container-premium">
+                        <img src="new-products-images/24.jpg" alt="Perfomen shampoo малий" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">PERFOMEN</div>
+                        <h2 class="product-name head-font">DAILY SHAMPOO · МАЛИЙ</h2>
+                        <p class="product-sub">Шампунь для щоденного використання Perfomen, компактний формат.</p>
+                        <div class="single-volume-badge">Малий</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">200</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>
             </div>
         </main>
 
