@@ -14,28 +14,29 @@ module.exports = async (req, res) => {
     if (!text) return res.status(400).json({ error: 'No text provided' });
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-    if (!token || !chatId) {
+    // TELEGRAM_CHAT_ID may hold several recipients, comma-separated
+    // (e.g. owner + barber) — the order is delivered to each.
+    const chatIds = String(process.env.TELEGRAM_CHAT_ID || '')
+        .split(',').map((s) => s.trim()).filter(Boolean);
+    if (!token || !chatIds.length) {
         return res.status(500).json({ error: 'Telegram credentials not configured' });
     }
 
     try {
-        const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // No parse_mode on purpose: product names contain "&" / "<" which
-            // would break Telegram's HTML parser. Plain text is safe.
-            body: JSON.stringify({
-                chat_id: chatId,
-                text,
-                disable_web_page_preview: true
-            })
-        });
+        const results = await Promise.all(chatIds.map((id) =>
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // No parse_mode on purpose: product names contain "&" / "<" which
+                // would break Telegram's HTML parser. Plain text is safe.
+                body: JSON.stringify({ chat_id: id, text, disable_web_page_preview: true })
+            }).then((r) => r.json()).catch((e) => ({ ok: false, error: String(e) }))
+        ));
 
-        const data = await tgRes.json();
-        if (data.ok) return res.status(200).json({ success: true });
+        // Success if the order reached at least one recipient.
+        if (results.some((d) => d && d.ok)) return res.status(200).json({ success: true });
 
-        console.error('Telegram API error:', data);
+        console.error('Telegram API error:', results);
         return res.status(502).json({ error: 'Failed to send to Telegram' });
     } catch (error) {
         console.error('Server error:', error);

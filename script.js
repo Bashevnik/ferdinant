@@ -81,14 +81,16 @@ if (canvas) {
     const particleCount = reducedMotion ? 0 : (window.innerWidth < 768 ? 18 : 36);
     for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
-    function animate() {
-        if (document.hidden || reducedMotion) {
-            frameId = requestAnimationFrame(animate);
-            return;
-        }
+    // Throttle to ~30fps — the particles drift slowly, so half the redraws
+    // look identical but cost Safari/Mac far less CPU/GPU.
+    let lastDraw = 0;
+    function animate(now) {
+        frameId = requestAnimationFrame(animate);
+        if (document.hidden || reducedMotion) return;
+        if (now - lastDraw < 33) return;
+        lastDraw = now;
         ctx.clearRect(0, 0, w, h);
         particles.forEach(p => { p.update(); p.draw(); });
-        frameId = requestAnimationFrame(animate);
     }
 
     if (!reducedMotion) frameId = requestAnimationFrame(animate);
@@ -326,6 +328,47 @@ function initPageTransitions() {
     let isTransitioning = false;
     let loader = null;
 
+    // --- Prefetch internal pages so navigation feels instant ---
+    // The transition animation runs ~0.6s; we use that time to download the
+    // next page in the background, so it's ready the moment the animation ends.
+    const prefetched = new Set();
+    const supportsPrefetch = (() => {
+        try { return document.createElement('link').relList.supports('prefetch'); }
+        catch { return false; }
+    })();
+
+    const prefetch = (url) => {
+        if (!url || prefetched.has(url)) return;
+        prefetched.add(url);
+        if (supportsPrefetch) {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.as = 'document';
+            link.href = url;
+            document.head.appendChild(link);
+        } else {
+            // Safari doesn't honour rel=prefetch — warm the HTTP cache with fetch
+            fetch(url, { credentials: 'same-origin' }).catch(() => {});
+        }
+    };
+
+    const prefetchFromAnchor = (anchor) => {
+        if (!anchor) return;
+        const href = anchor.getAttribute('href') || '';
+        if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
+        const url = new URL(anchor.href, window.location.href);
+        if (url.origin !== window.location.origin || url.href === window.location.href) return;
+        prefetch(url.href);
+    };
+
+    // Warm the cache as soon as the user shows intent (hover / focus / touch)
+    ['mouseover', 'touchstart', 'focusin'].forEach((evt) => {
+        document.addEventListener(evt, (event) => {
+            const anchor = event.target.closest && event.target.closest('a[href]');
+            if (anchor) prefetchFromAnchor(anchor);
+        }, { passive: true, capture: true });
+    });
+
     const getLoader = () => {
         if (loader) return loader;
 
@@ -369,6 +412,8 @@ function initPageTransitions() {
         isTransitioning = true;
 
         const nextUrl = anchor.href;
+        // Start downloading the next page now, while the animation plays
+        prefetch(nextUrl);
         const transition = getLoader();
         const content = transition.querySelector('.page-transition-content');
         const mark = transition.querySelector('.page-transition-mark');
