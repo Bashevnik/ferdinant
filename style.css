@@ -165,9 +165,9 @@ a {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(5, 5, 5, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* Safari/Mac: backdrop-filter on a fixed header repaints every scroll
+       frame and causes jank — use a near-opaque solid bg instead. */
+    background: rgba(5, 5, 5, 0.94);
     transition: all 0.4s ease;
 }
 
