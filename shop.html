@@ -86,11 +86,17 @@
         .img-container-premium img {
             width: 100%;
             height: 100%;
-            /* contain = never crop the bottle/cap; show the whole product */
+            /* light tiles: contain, no padding — bottle fills the tile (no crop),
+               seamless on white */
             object-fit: contain;
-            padding: 18px;
+            padding: 0;
             box-sizing: border-box;
             transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* dark studio shots are composed to fill — let them cover the whole tile */
+        .img-container-premium.img-dark img {
+            object-fit: cover;
         }
 
         .img-container-premium .secondary-img {
