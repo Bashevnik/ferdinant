@@ -1,1 +1,3 @@
-[]
+[
+  { "code": "DEPOT / TEST", "name": "WRITE-TEST", "sub": "temp", "volume": "1 ml", "price": 1, "image": "new-products-images/22.jpg", "tile": "dark", "details": "" }
+]
