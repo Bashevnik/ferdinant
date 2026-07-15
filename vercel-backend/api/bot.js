@@ -67,8 +67,8 @@ module.exports = async (req, res) => {
 
     // ---- auth ----
     if (!admins.includes(fromId)) {
-        if (cbq) await tg('answerCallbackQuery', { callback_query_id: cbq.id, text: '⛔ Лише для власника' });
-        else await send('⛔ Ця адмін-панель лише для власника.');
+        if (cbq) await tg('answerCallbackQuery', { callback_query_id: cbq.id, text: '⛔ Немає доступу' });
+        else await send(`⛔ Ця адмін-панель лише для власників.\n\n🆔 Твій Telegram ID: ${fromId}\nНадішли його власнику — і він додасть тобі доступ.`);
         return res.status(200).json({ ok: true });
     }
     if (!ghToken) { await send('⚙️ Немає GITHUB_TOKEN — скажи розробнику.'); return res.status(200).json({ ok: true }); }
