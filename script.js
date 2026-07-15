@@ -698,8 +698,8 @@ function initShopCart() {
         open();
     });
 
-    // --- Render extra products managed via the Telegram admin bot ---
-    // The 13 base products stay as static HTML; the bot only appends here.
+    // --- Whole catalogue is data-driven: rendered from products.json ---
+    // (managed via the Telegram admin bot — add/edit/delete).
     const grid = document.querySelector('.product-grid-new');
     if (grid) {
         fetch('products.json', { cache: 'no-store' })
@@ -708,9 +708,13 @@ function initShopCart() {
                 if (!Array.isArray(products) || !products.length) return;
                 const html = products.map((p) => {
                     const price = String(p.price ?? '').replace(/\D/g, '') || '0';
-                    const details = p.details
+                    // details may be admin-authored HTML (migrated) or plain text (bot)
+                    const inner = p.details
+                        ? (/^\s*</.test(p.details) ? p.details : `<p>${escapeHtml(p.details)}</p>`)
+                        : '';
+                    const details = inner
                         ? `<div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
-                           <div class="product-details-content"><p>${escapeHtml(p.details)}</p></div>`
+                           <div class="product-details-content">${inner}</div>`
                         : '';
                     return `
                     <article class="product-card-premium">
@@ -730,7 +734,7 @@ function initShopCart() {
                         </div>
                     </article>`;
                 }).join('');
-                grid.insertAdjacentHTML('beforeend', html);
+                grid.innerHTML = html;
             })
             .catch(() => {});
     }
