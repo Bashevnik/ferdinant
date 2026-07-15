@@ -7,6 +7,7 @@ const GH = 'https://api.github.com';
 const PRODUCTS_PATH = 'products.json';
 const IMG_DIR = 'new-products-images';
 const EDIT_MARK = 'Оновлення товару #';
+const { listOrders, getOrder, deleteOrder } = require('../lib/kv');
 
 // Wizard fields, in order (matches the copy template). code/volume/sub/tile optional.
 const FIELDS = [
@@ -36,7 +37,8 @@ module.exports = async (req, res) => {
             await tg('setMyCommands', { commands: [
                 { command: 'menu', description: '🏠 Головне меню' },
                 { command: 'add', description: '➕ Додати товар' },
-                { command: 'list', description: '📋 Мої товари' },
+                { command: 'list', description: '📋 Товари' },
+                { command: 'orders', description: '📥 Замовлення' },
                 { command: 'help', description: '❓ Довідка' }
             ] });
             await tg('setChatMenuButton', { menu_button: { type: 'commands' } });
@@ -59,7 +61,8 @@ module.exports = async (req, res) => {
     const send = (text, extra = {}) => tg('sendMessage', { chat_id: chatId, disable_web_page_preview: true, ...extra, text });
     const menuKb = () => ({ inline_keyboard: [
         [{ text: '➕ Додати товар', callback_data: 'add' }],
-        [{ text: '📋 Мої товари', callback_data: 'list' }, { text: '❓ Довідка', callback_data: 'help' }]
+        [{ text: '📋 Мої товари', callback_data: 'list' }, { text: '📥 Замовлення', callback_data: 'orders' }],
+        [{ text: '❓ Довідка', callback_data: 'help' }]
     ] });
 
     // ---- auth ----
@@ -89,6 +92,15 @@ module.exports = async (req, res) => {
                 return done(res, await send(`🗑 Видалити «${esc(arr[i].name)}»?`, { reply_markup: { inline_keyboard: [[
                     { text: '✅ Так, видалити', callback_data: `delc:${i}` }, { text: '↩️ Ні', callback_data: 'list' }]] } }));
             }
+            if (data === 'orders') return done(res, await sendOrders(send));
+            if (data.startsWith('vieworder:')) return done(res, await sendOrderView(send, data.slice(10)));
+            if (data.startsWith('delorderc:')) { await deleteOrder(data.slice(10)); await send('🗑 Замовлення видалено.'); return done(res, await sendOrders(send)); }
+            if (data.startsWith('delorder:')) {
+                const id = data.slice(9); const o = await getOrder(id);
+                if (!o) return done(res, await send('Замовлення вже немає.'));
+                return done(res, await send(`🗑 Видалити замовлення від ${esc(o.name || '—')}?`, { reply_markup: { inline_keyboard: [[
+                    { text: '✅ Так', callback_data: `delorderc:${id}` }, { text: '↩️ Ні', callback_data: 'orders' }]] } }));
+            }
             return done(res, await send(MENU_TXT, { parse_mode: 'HTML', reply_markup: menuKb() }));
         }
 
@@ -115,6 +127,7 @@ module.exports = async (req, res) => {
         if (/^\/help/i.test(text)) return done(res, await send(HELP_TXT, { parse_mode: 'HTML', reply_markup: backKb() }));
         if (/^\/add/i.test(text)) return done(res, await send(ADD_TXT, { parse_mode: 'HTML', reply_markup: addKb() }));
         if (/^\/list/i.test(text)) return done(res, await sendList(send, ghToken, repo));
+        if (/^\/orders/i.test(text)) return done(res, await sendOrders(send));
         const dl = text.match(/^\/delete\s+(\d+)/i);
         if (dl) { const r = await deleteProduct(ghToken, repo, +dl[1] - 1); return done(res, await send(r, { reply_markup: backKb() })); }
 
@@ -279,14 +292,14 @@ async function deleteProduct(ghToken, repo, index) {
 async function sendList(send, ghToken, repo) {
     const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const { data } = await getJson(ghToken, repo);
-    if (!data.length) return send('📋 Товарів, доданих ботом, поки немає.\n\n(Базові 13 товарів магазину живуть у коді.)', { parse_mode: 'HTML', reply_markup: addKb() });
+    if (!data.length) return send('📋 Товарів поки немає. Натисни «Додати товар».', { parse_mode: 'HTML', reply_markup: addKb() });
     const rows = data.map((p, i) => [
         { text: `✏️ ${(p.name || '').slice(0, 20)}`, callback_data: `edit:${i}` },
         { text: '🗑', callback_data: `del:${i}` }
     ]);
     rows.push([{ text: '➕ Додати', callback_data: 'add' }, { text: '🏠 Меню', callback_data: 'menu' }]);
     const list = data.map((p, i) => `${i + 1}. <b>${esc(p.name)}</b> — ${p.price} ₴`).join('\n');
-    return send(`📋 <b>Товари (додані ботом):</b>\n\n${list}`, { parse_mode: 'HTML', reply_markup: { inline_keyboard: rows } });
+    return send(`📋 <b>Товари магазину</b> (${data.length}):\n\n${list}`, { parse_mode: 'HTML', reply_markup: { inline_keyboard: rows } });
 }
 async function sendEditTemplate(send, ghToken, repo, index) {
     const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -296,4 +309,28 @@ async function sendEditTemplate(send, ghToken, repo, index) {
     const tpl = `${EDIT_MARK}${index + 1}\nНазва: ${p.name || ''}\nКод: ${p.code || ''}\nЦіна: ${p.price || ''}\nОбʼєм: ${p.volume || ''}\nОпис: ${p.sub || ''}\nПлитка: ${p.tile === 'dark' ? 'темна' : 'світла'}`;
     await send(`<pre>${esc(tpl)}</pre>`, { parse_mode: 'HTML' });
     return send('☝️ Зміни значення і надішли назад.\n• тільки текст — оновить дані, фото лишиться;\n• текст + нове фото — замінить і фото.\n<b>Перший рядок не видаляй</b> — по ньому я впізнаю товар.', { parse_mode: 'HTML', reply_markup: backKb() });
+}
+
+// ---------- orders (private KV store) ----------
+async function sendOrders(send) {
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const orders = await listOrders();
+    if (orders === null) return send('📥 Сховище замовлень ще не підключено (потрібна приватна база Vercel KV). Скажи розробнику — підключу.', { parse_mode: 'HTML', reply_markup: backKb() });
+    if (!orders.length) return send('📥 Замовлень поки немає.', { reply_markup: backKb() });
+    const shown = orders.slice(0, 20);
+    const rows = shown.map((o) => [
+        { text: `👁 ${(o.name || '—').slice(0, 16)} · ${o.total || ''}`.trim(), callback_data: `vieworder:${o.id}` },
+        { text: '🗑', callback_data: `delorder:${o.id}` }
+    ]);
+    rows.push([{ text: '🏠 Меню', callback_data: 'menu' }]);
+    const head = shown.map((o, i) => `${i + 1}. ${esc(o.name || '—')} · ${esc(o.phone || '')} · <b>${esc(o.total || '')}</b>`).join('\n');
+    return send(`📥 <b>Замовлення</b> (${shown.length} з ${orders.length}):\n\n${head}`, { parse_mode: 'HTML', reply_markup: { inline_keyboard: rows } });
+}
+async function sendOrderView(send, id) {
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const o = await getOrder(id);
+    if (!o) return send('Замовлення вже немає.', { reply_markup: backKb() });
+    const date = new Date(o.ts || Date.now()).toLocaleString('uk-UA');
+    return send(`📦 <b>Замовлення</b> · ${esc(date)}\n\n${esc(o.text || '')}`, { parse_mode: 'HTML', reply_markup: { inline_keyboard: [[
+        { text: '🗑 Видалити', callback_data: `delorder:${id}` }, { text: '↩️ До списку', callback_data: 'orders' }]] } });
 }

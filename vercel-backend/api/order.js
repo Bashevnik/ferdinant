@@ -1,6 +1,7 @@
-// Vercel serverless function — forwards a shop order to Telegram.
-// Secrets come from Vercel env vars (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID),
-// never from the repo.
+// Vercel serverless function — forwards a shop order to Telegram
+// and (if a private KV store is configured) saves it for the admin CRM.
+const { saveOrder } = require('../lib/kv');
+
 module.exports = async (req, res) => {
     // CORS — allow the static site (GitHub Pages / Vercel) to call this.
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,6 +33,19 @@ module.exports = async (req, res) => {
                 body: JSON.stringify({ chat_id: id, text, disable_web_page_preview: true })
             }).then((r) => r.json()).catch((e) => ({ ok: false, error: String(e) }))
         ));
+
+        // Persist for the admin CRM (private KV) — never blocks the order.
+        try {
+            const get = (label) => { const m = text.match(new RegExp(label + '[:\\s]+(.+)')); return m ? m[1].trim() : ''; };
+            await saveOrder({
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                ts: Date.now(),
+                name: get('Ім.?я'),
+                phone: get('Телефон'),
+                total: get('Разом'),
+                text
+            });
+        } catch (e) { console.error('KV save failed:', e); }
 
         // Success if the order reached at least one recipient.
         if (results.some((d) => d && d.ok)) return res.status(200).json({ success: true });
