@@ -84,7 +84,20 @@ module.exports = async (req, res) => {
             if (data === 'tpl') { await send(TEMPLATE_TXT, { parse_mode: 'HTML' }); return done(res, await send('☝️ Скопіюй, заповни значення і надішли <b>фото товару з цим текстом у підписі</b>.', { parse_mode: 'HTML', reply_markup: backKb() })); }
             if (data === 'wiz') return done(res, await sendWizardStep(send, 0, {}));
             if (data === 'list') return done(res, await sendList(send, ghToken, repo));
-            if (data.startsWith('edit:')) return done(res, await sendEditTemplate(send, ghToken, repo, +data.slice(5)));
+            if (data.startsWith('edit:')) return done(res, await sendEditMenu(send, ghToken, repo, +data.slice(5)));
+            if (data.startsWith('ef:')) {
+                const [, idxS, field] = data.split(':');
+                if (field === 'tile') return done(res, await send('🎨 Обери фон плитки:', { reply_markup: { inline_keyboard: [[
+                    { text: '⬜ Світла', callback_data: `et:${idxS}:light` }, { text: '⬛ Темна', callback_data: `et:${idxS}:dark` }]] } }));
+                const labels = { name: 'Назва', code: 'Код', price: 'Ціна', volume: 'Обʼєм', sub: 'Опис', photo: 'Фото' };
+                const hint = field === 'photo' ? 'Надішли нове ФОТО у відповідь на це повідомлення.' : 'Напиши нове значення у відповідь на це повідомлення.';
+                return done(res, await send(`✏️ Товар #${+idxS + 1} · ${labels[field] || field}\n${hint}`, { reply_markup: { force_reply: true } }));
+            }
+            if (data.startsWith('et:')) {
+                const [, idxS, tile] = data.split(':');
+                await updateProduct(ghToken, repo, +idxS, { tile });
+                return done(res, await sendEditMenu(send, ghToken, repo, +idxS));
+            }
             if (data.startsWith('delc:')) { const r = await deleteProduct(ghToken, repo, +data.slice(5)); await send(r); return done(res, await sendList(send, ghToken, repo)); }
             if (data.startsWith('del:')) {
                 const i = +data.slice(4); const { data: arr } = await getJson(ghToken, repo);
@@ -109,6 +122,11 @@ module.exports = async (req, res) => {
         // ================= WIZARD REPLIES =================
         if (msg.reply_to_message && /Новий товар/.test(msg.reply_to_message.text || '')) {
             return done(res, await handleWizardReply(send, token, ghToken, repo, msg));
+        }
+
+        // ================= EDIT FIELD REPLY =================
+        if (msg.reply_to_message && /^✏️ Товар #\d+/.test(msg.reply_to_message.text || '')) {
+            return done(res, await handleEditFieldReply(send, token, ghToken, repo, msg));
         }
 
         // ================= EDIT (prefilled template resent) =================
@@ -301,14 +319,39 @@ async function sendList(send, ghToken, repo) {
     const list = data.map((p, i) => `${i + 1}. <b>${esc(p.name)}</b> — ${p.price} ₴`).join('\n');
     return send(`📋 <b>Товари магазину</b> (${data.length}):\n\n${list}`, { parse_mode: 'HTML', reply_markup: { inline_keyboard: rows } });
 }
-async function sendEditTemplate(send, ghToken, repo, index) {
+async function sendEditMenu(send, ghToken, repo, index) {
     const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const { data } = await getJson(ghToken, repo);
     const p = data[index];
     if (!p) return send('Товару вже немає.', { reply_markup: backKb() });
-    const tpl = `${EDIT_MARK}${index + 1}\nНазва: ${p.name || ''}\nКод: ${p.code || ''}\nЦіна: ${p.price || ''}\nОбʼєм: ${p.volume || ''}\nОпис: ${p.sub || ''}\nПлитка: ${p.tile === 'dark' ? 'темна' : 'світла'}`;
-    await send(`<pre>${esc(tpl)}</pre>`, { parse_mode: 'HTML' });
-    return send('☝️ Зміни значення і надішли назад.\n• тільки текст — оновить дані, фото лишиться;\n• текст + нове фото — замінить і фото.\n<b>Перший рядок не видаляй</b> — по ньому я впізнаю товар.', { parse_mode: 'HTML', reply_markup: backKb() });
+    const info = `✏️ <b>Редагування товару</b>\n\n📝 Назва: ${esc(p.name || '—')}\n🏷 Код: ${esc(p.code || '—')}\n💰 Ціна: ${p.price || '—'} ₴\n📦 Обʼєм: ${esc(p.volume || '—')}\n📄 Опис: ${esc(p.sub || '—')}\n🎨 Плитка: ${p.tile === 'dark' ? 'темна' : 'світла'}\n\n👇 Натисни, що змінити:`;
+    const kb = { inline_keyboard: [
+        [{ text: '📝 Назва', callback_data: `ef:${index}:name` }, { text: '🏷 Код', callback_data: `ef:${index}:code` }],
+        [{ text: '💰 Ціна', callback_data: `ef:${index}:price` }, { text: '📦 Обʼєм', callback_data: `ef:${index}:volume` }],
+        [{ text: '📄 Опис', callback_data: `ef:${index}:sub` }, { text: '🎨 Плитка', callback_data: `ef:${index}:tile` }],
+        [{ text: '🖼 Фото', callback_data: `ef:${index}:photo` }],
+        [{ text: '🗑 Видалити', callback_data: `del:${index}` }, { text: '🏠 Меню', callback_data: 'menu' }]
+    ] };
+    return send(info, { parse_mode: 'HTML', reply_markup: kb });
+}
+
+async function handleEditFieldReply(send, token, ghToken, repo, msg) {
+    const prev = msg.reply_to_message.text || '';
+    const idx = (Number((prev.match(/#(\d+)/) || [])[1]) || 1) - 1;
+    const lm = prev.match(/· (Назва|Код|Ціна|Обʼєм|Опис|Фото)/);
+    const key = { 'Назва': 'name', 'Код': 'code', 'Ціна': 'price', 'Обʼєм': 'volume', 'Опис': 'sub', 'Фото': 'photo' }[lm ? lm[1] : ''];
+    if (!key) return send('Не зрозумів поле — відкрий редагування ще раз.', { reply_markup: backKb() });
+    if (key === 'photo') {
+        if (!(msg.photo && msg.photo.length)) return send('📸 Надішли саме ФОТО у відповідь.', { reply_markup: { force_reply: true } });
+        const image = await commitPhoto(token, ghToken, repo, msg.photo[msg.photo.length - 1].file_id);
+        await updateProduct(ghToken, repo, idx, {}, image);
+    } else {
+        const val = (msg.text || '').trim();
+        if (!val) return send('Порожньо — надішли значення ще раз.', { reply_markup: { force_reply: true } });
+        await updateProduct(ghToken, repo, idx, { [key]: val });
+    }
+    await send('✅ Оновлено. Зміни зʼявляться на сайті за ~1 хв.');
+    return sendEditMenu(send, ghToken, repo, idx);
 }
 
 // ---------- orders (private KV store) ----------
