@@ -680,22 +680,60 @@ function initShopCart() {
         `).join('');
     };
 
-    document.querySelectorAll('.add-to-cart').forEach((button) => {
-        button.addEventListener('click', () => {
-            const item = getProductFromCard(button);
-            const existing = cart.find((cartItem) => cartItem.id === item.id);
+    // Delegated so it also covers products rendered from products.json (below)
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('.add-to-cart');
+        if (!button) return;
+        const item = getProductFromCard(button);
+        const existing = cart.find((cartItem) => cartItem.id === item.id);
 
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                cart.push(item);
-            }
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            cart.push(item);
+        }
 
-            save();
-            render();
-            open();
-        });
+        save();
+        render();
+        open();
     });
+
+    // --- Render extra products managed via the Telegram admin bot ---
+    // The 13 base products stay as static HTML; the bot only appends here.
+    const grid = document.querySelector('.product-grid-new');
+    if (grid) {
+        fetch('products.json', { cache: 'no-store' })
+            .then((response) => (response.ok ? response.json() : []))
+            .then((products) => {
+                if (!Array.isArray(products) || !products.length) return;
+                const html = products.map((p) => {
+                    const price = String(p.price ?? '').replace(/\D/g, '') || '0';
+                    const details = p.details
+                        ? `<div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                           <div class="product-details-content"><p>${escapeHtml(p.details)}</p></div>`
+                        : '';
+                    return `
+                    <article class="product-card-premium">
+                        <div class="img-container-premium${p.tile === 'dark' ? ' img-dark' : ''}">
+                            <img src="${escapeHtml(p.image || '')}" alt="${escapeHtml(p.name || '')}" class="primary-img" loading="lazy" decoding="async">
+                        </div>
+                        <div class="info-container-premium">
+                            <div class="product-art">${escapeHtml(p.code || 'DEPOT')}</div>
+                            <h2 class="product-name head-font">${escapeHtml(p.name || '')}</h2>
+                            <p class="product-sub">${escapeHtml(p.sub || '')}</p>
+                            ${details}
+                            <div class="single-volume-badge">${escapeHtml(p.volume || '')}</div>
+                            <div class="price-row-premium">
+                                <span class="price-current"><span class="price-val">${escapeHtml(price)}</span> ₴</span>
+                            </div>
+                            <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                        </div>
+                    </article>`;
+                }).join('');
+                grid.insertAdjacentHTML('beforeend', html);
+            })
+            .catch(() => {});
+    }
 
     itemsNode?.addEventListener('click', (event) => {
         const button = event.target.closest('button[data-cart-action]');
