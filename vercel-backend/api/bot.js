@@ -143,6 +143,8 @@ async function ghApi(ghToken, path, options = {}) {
         headers: {
             'Authorization': `Bearer ${ghToken}`,
             'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json',
             'User-Agent': 'ferdinand-admin-bot',
             ...(options.headers || {})
         }
