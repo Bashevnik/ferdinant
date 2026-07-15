@@ -4345,3 +4345,25 @@ body.cart-open {
     }
 }
 
+/* ─── Reveal-flash guard ─────────────────────────────────────────
+   Blocks that GSAP fades in are hidden up-front (via .reveal-init on
+   <html>, set inline in <head>) so they never flash visible → hidden.
+   GSAP's fromTo sets an inline opacity that overrides this; reduced-motion
+   (and the 2.5s inline safety) fall back to fully visible. No !important
+   here on purpose — GSAP's inline styles must be able to win. */
+.reveal-init .hero-text-block > *,
+.reveal-init .section-head > *,
+.reveal-init .reveal-up,
+.reveal-init [data-reveal] {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-init .hero-text-block > *,
+    .reveal-init .section-head > *,
+    .reveal-init .reveal-up,
+    .reveal-init [data-reveal] {
+        opacity: 1;
+    }
+}
+

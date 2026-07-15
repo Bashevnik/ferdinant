@@ -831,28 +831,32 @@ if (typeof gsap !== 'undefined') {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!prefersReducedMotion) {
-        gsap.from('.hero-text-block > *, .section-head > *, .reveal-up', {
-            autoAlpha: 0.01,
-            y: 34,
-            duration: 1.15,
-            stagger: 0.12,
-            ease: 'power3.out',
-            delay: 0.08
-        });
+        gsap.fromTo('.hero-text-block > *, .section-head > *, .reveal-up',
+            { autoAlpha: 0.01, y: 34 },
+            {
+                autoAlpha: 1,
+                y: 0,
+                duration: 1.15,
+                stagger: 0.12,
+                ease: 'power3.out',
+                delay: 0.08
+            });
 
         if (typeof ScrollTrigger !== 'undefined') {
             document.querySelectorAll('[data-reveal]').forEach((el) => {
-                gsap.from(el, {
-                    autoAlpha: 0.01,
-                    y: 42,
-                    duration: 0.95,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 86%',
-                        once: true
-                    }
-                });
+                gsap.fromTo(el,
+                    { autoAlpha: 0.01, y: 42 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.95,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 86%',
+                            once: true
+                        }
+                    });
             });
 
             document.querySelectorAll('.service-row, .product-tile, .barber-card').forEach((el) => {
@@ -887,5 +891,12 @@ if (typeof gsap !== 'undefined') {
             });
         }
     }
+
+    // Reveal targets now carry GSAP's own inline opacity (or reduced motion
+    // is on) — drop the pre-hide guard so content can never stay hidden.
+    document.documentElement.classList.remove('reveal-init');
+} else {
+    // GSAP unavailable (e.g. CDN blocked) — show everything immediately.
+    document.documentElement.classList.remove('reveal-init');
 }
 }
