@@ -228,5 +228,15 @@
     "image": "new-products-images/24.jpg",
     "tile": "light",
     "details": ""
+  },
+  {
+    "code": "TEST",
+    "name": "DELETE ME (test)",
+    "sub": "",
+    "volume": "1 ml",
+    "price": 1,
+    "image": "new-products-images/22.jpg",
+    "tile": "dark",
+    "details": ""
   }
 ]
