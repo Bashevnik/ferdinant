@@ -109,11 +109,25 @@ module.exports = async (req, res) => {
     };
 
     const menuKb = () => ({ inline_keyboard: [
-        [{ text: '📦 Каталог товарів', callback_data: 'cat:0' }],
+        [{ text: '📦 Каталог товарів', callback_data: 'catlist:0' }],
         [{ text: '➕ Додати товар', callback_data: 'wiz:0' }, { text: '📥 Замовлення', callback_data: 'orders:0' }],
         [{ text: '❓ Довідка', callback_data: 'help' }]
     ] });
     const backKb = (extra = []) => ({ inline_keyboard: [...extra, [{ text: '🏠 Меню', callback_data: 'menu' }]] });
+
+    // Live dashboard stats for the menu screen — count + inventory value make
+    // /menu itself feel like a mini-dashboard, not just a button list.
+    async function menuText() {
+        try {
+            const { data } = await getJson(ghToken, repo);
+            const total = data.reduce((s, p) => s + (Number(p.price) || 0), 0);
+            const orders = await listOrders();
+            const ordersLine = orders === null ? '' : `\n📥 Замовлень: ${orders.length}`;
+            return `🐂 <b>FERDINAND</b> — адмін-панель\n\n📦 Товарів: ${data.length} · 💰 ${total.toLocaleString('uk-UA')} ₴${ordersLine}`;
+        } catch {
+            return MENU_TXT;
+        }
+    }
 
     // ---- auth ----
     if (!admins.includes(fromId)) {
@@ -153,7 +167,7 @@ module.exports = async (req, res) => {
                 const tileIcon = p.tile === 'dark' ? '⬛' : '⬜';
                 const caption = `📦 <b>${esc(p.name || '—')}</b>\n${esc(p.code || '')}\n💰 ${p.price || 0} ₴ ${p.volume ? '· ' + esc(p.volume) : ''} ${tileIcon}`;
                 const kb = { inline_keyboard: [
-                    [{ text: '◀', callback_data: `cat:${idx - 1}` }, { text: `${idx + 1} / ${n}`, callback_data: `catlist:${Math.floor(idx / 10)}` }, { text: '▶', callback_data: `cat:${idx + 1}` }],
+                    [{ text: '◀', callback_data: `cat:${idx - 1}` }, { text: `📋 ${idx + 1}/${n}`, callback_data: `catlist:${Math.floor(idx / 10)}` }, { text: '▶', callback_data: `cat:${idx + 1}` }],
                     [{ text: '✏️ Редагувати', callback_data: `cedit:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }],
                     [{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]
                 ] };
@@ -182,11 +196,12 @@ module.exports = async (req, res) => {
 
             async function renderIndex(page) {
                 const { data } = await getJson(ghToken, repo);
-                if (!data.length) return screen('📦 Товарів поки немає.', { reply_markup: backKb() });
+                if (!data.length) return screen('📦 Товарів поки немає.', { reply_markup: backKb([[{ text: '➕ Додати товар', callback_data: 'wiz:0' }]]) });
                 const PER = 10;
                 const pages = Math.ceil(data.length / PER);
                 page = ((page % pages) + pages) % pages;
                 const slice = data.slice(page * PER, page * PER + PER);
+                const total = data.reduce((s, p) => s + (Number(p.price) || 0), 0);
                 const rows = slice.map((p, i) => {
                     const idx = page * PER + i;
                     return [{ text: `${idx + 1}. ${(p.name || '').slice(0, 26)} — ${p.price} ₴`, callback_data: `cat:${idx}` }];
@@ -194,8 +209,9 @@ module.exports = async (req, res) => {
                 const nav = [];
                 if (pages > 1) nav.push({ text: '◀', callback_data: `catlist:${page - 1}` }, { text: `${page + 1}/${pages}`, callback_data: `catlist:${page}` }, { text: '▶', callback_data: `catlist:${page + 1}` });
                 if (nav.length) rows.push(nav);
-                rows.push([{ text: '🏠 Меню', callback_data: 'menu' }]);
-                return screen('📋 <b>Каталог</b> — обери товар:', { reply_markup: { inline_keyboard: rows } });
+                rows.push([{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]);
+                const head = `📋 <b>Каталог</b> · ${data.length} товарів · ${total.toLocaleString('uk-UA')} ₴\nОбери товар:`;
+                return screen(head, { reply_markup: { inline_keyboard: rows } });
             }
 
             async function renderOrders(page) {
@@ -247,7 +263,7 @@ module.exports = async (req, res) => {
                 return isEdit ? screen(text, { reply_markup: kb }) : send(text, { reply_markup: kb });
             }
 
-            if (data === 'menu') return done(res, await screen(MENU_TXT, { reply_markup: menuKb() }));
+            if (data === 'menu') return done(res, await screen(await menuText(), { reply_markup: menuKb() }));
             if (data === 'help') return done(res, await screen(HELP_TXT, { reply_markup: backKb() }));
 
             // ---- catalog (photo cards) ----
@@ -308,7 +324,7 @@ module.exports = async (req, res) => {
             }
 
             toast();
-            return done(res, await screen(MENU_TXT, { reply_markup: menuKb() }));
+            return done(res, await screen(await menuText(), { reply_markup: menuKb() }));
         }
 
         // ================= INCOMING MESSAGES =================
@@ -324,9 +340,9 @@ module.exports = async (req, res) => {
         }
 
         // ---- commands ----
-        if (/^\/(start|menu)/i.test(text)) return done(res, await send(MENU_TXT, { reply_markup: menuKb() }));
+        if (/^\/(start|menu)/i.test(text)) return done(res, await send(await menuText(), { reply_markup: menuKb() }));
         if (/^\/help/i.test(text)) return done(res, await send(HELP_TXT, { reply_markup: backKb() }));
-        if (/^\/catalog/i.test(text)) return done(res, await renderCardNew(0));
+        if (/^\/catalog/i.test(text)) return done(res, await renderIndexNew(0));
         if (/^\/orders/i.test(text)) return done(res, await renderOrdersNew(0));
 
         // ---- power-user shortcut: photo + caption fields in one message ----
@@ -340,7 +356,7 @@ module.exports = async (req, res) => {
             return done(res, await renderCardNew(idx));
         }
 
-        return done(res, await send(MENU_TXT, { reply_markup: menuKb() }));
+        return done(res, await send(await menuText(), { reply_markup: menuKb() }));
 
         // ---------------------------------------------------------------
         // Message-context helpers (no existing message to edit — always send new)
@@ -353,11 +369,30 @@ module.exports = async (req, res) => {
             const tileIcon = p.tile === 'dark' ? '⬛' : '⬜';
             const caption = `📦 <b>${esc(p.name || '—')}</b>\n${esc(p.code || '')}\n💰 ${p.price || 0} ₴ ${p.volume ? '· ' + esc(p.volume) : ''} ${tileIcon}`;
             const kb = { inline_keyboard: [
-                [{ text: '◀', callback_data: `cat:${idx - 1}` }, { text: `${idx + 1} / ${n}`, callback_data: `catlist:${Math.floor(idx / 10)}` }, { text: '▶', callback_data: `cat:${idx + 1}` }],
+                [{ text: '◀', callback_data: `cat:${idx - 1}` }, { text: `📋 ${idx + 1}/${n}`, callback_data: `catlist:${Math.floor(idx / 10)}` }, { text: '▶', callback_data: `cat:${idx + 1}` }],
                 [{ text: '✏️ Редагувати', callback_data: `cedit:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }],
                 [{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]
             ] };
             return tg('sendPhoto', { chat_id: chatId, photo: p.tgFileId || rawUrl(p.image), caption, parse_mode: 'HTML', reply_markup: kb });
+        }
+        async function renderIndexNew(page) {
+            const { data } = await getJson(ghToken, repo);
+            if (!data.length) return send('📦 Товарів поки немає.', { reply_markup: backKb([[{ text: '➕ Додати товар', callback_data: 'wiz:0' }]]) });
+            const PER = 10;
+            const pages = Math.ceil(data.length / PER);
+            page = ((page % pages) + pages) % pages;
+            const slice = data.slice(page * PER, page * PER + PER);
+            const total = data.reduce((s, p) => s + (Number(p.price) || 0), 0);
+            const rows = slice.map((p, i) => {
+                const idx = page * PER + i;
+                return [{ text: `${idx + 1}. ${(p.name || '').slice(0, 26)} — ${p.price} ₴`, callback_data: `cat:${idx}` }];
+            });
+            const nav = [];
+            if (pages > 1) nav.push({ text: '◀', callback_data: `catlist:${page - 1}` }, { text: `${page + 1}/${pages}`, callback_data: `catlist:${page}` }, { text: '▶', callback_data: `catlist:${page + 1}` });
+            if (nav.length) rows.push(nav);
+            rows.push([{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]);
+            const head = `📋 <b>Каталог</b> · ${data.length} товарів · ${total.toLocaleString('uk-UA')} ₴\nОбери товар:`;
+            return send(head, { reply_markup: { inline_keyboard: rows } });
         }
         async function renderOrdersNew(page) {
             const orders = await listOrders();
@@ -462,7 +497,8 @@ const done = (res) => res.status(200).json({ ok: true });
 const MENU_TXT = '🐂 <b>FERDINAND</b> — адмін-панель\n\nКеруй магазином прямо звідси.';
 const HELP_TXT = [
     '❓ <b>Довідка</b>', '',
-    '📦 <b>Каталог</b> — гортай ◀▶, редагуй чи видаляй будь-який товар.',
+    '📋 <b>Каталог</b> — спершу список усіх товарів, тапни один — відкриється картка з фото.',
+    '◀ 📋 ▶ — гортай сусідні картки, середня кнопка поверне до списку.',
     '✏️ <b>Редагувати</b> — тапни поле (назва/ціна/фото/…), напиши нове значення.',
     '➕ <b>Додати</b> — я спитаю по одному пункту; необовʼязкові можна пропустити.',
     '📥 <b>Замовлення</b> — перегляд і видалення.', '',
