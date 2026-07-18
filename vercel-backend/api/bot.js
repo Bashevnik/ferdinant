@@ -83,8 +83,22 @@ module.exports = async (req, res) => {
                 ...extra
             });
             if (r && r.ok) return r;
+            console.error('editMessageMedia failed, falling back to sendPhoto:', JSON.stringify(r));
         }
-        return tg('sendPhoto', { chat_id: chatId, photo, caption, parse_mode: 'HTML', ...extra });
+        const r2 = await tg('sendPhoto', { chat_id: chatId, photo, caption, parse_mode: 'HTML', ...extra });
+        if (!r2 || !r2.ok) console.error('sendPhoto failed:', JSON.stringify(r2));
+        return r2;
+    };
+    // Cosmetically clear the buttons on the current screen (photo or text) before
+    // sending a separate force_reply prompt — silent best-effort, never sends a
+    // duplicate message (unlike screen()/photoScreen(), which fall back to a new send).
+    const clearButtons = async () => {
+        if (!cardMsgId) return;
+        if (cbq.message.photo) {
+            await tg('editMessageCaption', { chat_id: chatId, message_id: cardMsgId, caption: cbq.message.caption || '', parse_mode: 'HTML', reply_markup: { inline_keyboard: [] } }).catch(() => {});
+        } else {
+            await tg('editMessageReplyMarkup', { chat_id: chatId, message_id: cardMsgId, reply_markup: { inline_keyboard: [] } }).catch(() => {});
+        }
     };
     // Answers the callback exactly once (Telegram allows only a single answer per tap).
     let cbAnswered = false;
@@ -196,7 +210,7 @@ module.exports = async (req, res) => {
                 const total = FIELDS.length;
                 if (stepIdx >= total) {
                     const text = `📸 <b>Новий товар</b> · ${DOTS(total, total)}\n\nНадішли ФОТО товару у відповідь на це повідомлення.\n\n${renderDraft(draft)}`;
-                    return (isEdit ? screen(text, { reply_markup: { inline_keyboard: [] } }) : Promise.resolve())
+                    return (isEdit ? clearButtons() : Promise.resolve())
                         .then(() => send(text, { reply_markup: { force_reply: true } }));
                 }
                 const f = FIELDS[stepIdx];
@@ -207,7 +221,7 @@ module.exports = async (req, res) => {
                 }
                 const text = `${f.req ? '✍️' : '🧭'} <b>Новий товар</b> · ${DOTS(stepIdx, total)}\n${f.prompt}\n\n${renderDraft(draft)}`;
                 if (f.req) {
-                    return (isEdit ? screen(text, { reply_markup: { inline_keyboard: [] } }) : Promise.resolve())
+                    return (isEdit ? clearButtons() : Promise.resolve())
                         .then(() => send(text, { reply_markup: { force_reply: true } }));
                 }
                 const kb = { inline_keyboard: [[{ text: '⏭ Пропустити', callback_data: `wskip:${stepIdx}` }]] };
@@ -405,6 +419,7 @@ module.exports = async (req, res) => {
             return send(text, { reply_markup: { inline_keyboard: [[{ text: '⏭ Пропустити', callback_data: `wskip:${next}` }]] } });
         }
     } catch (e) {
+        console.error('bot handler error:', e && e.stack || e);
         await send('⚠️ Помилка: ' + (e && e.message ? e.message : e));
         return res.status(200).json({ ok: true });
     }
