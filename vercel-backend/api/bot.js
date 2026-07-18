@@ -129,6 +129,21 @@ module.exports = async (req, res) => {
             const data = cbq.data || '';
             if (!CUSTOM_TOAST.test(data)) toast(); // silent ack — keeps the button responsive
 
+            // Cache the Telegram file_id after the first time a product's photo is
+            // sent by URL — every later view reuses it (instant, no external
+            // fetch, works identically on phone and desktop).
+            async function cacheFileId(idx, result) {
+                try {
+                    if (!result || !result.ok || !result.result || !Array.isArray(result.result.photo)) return;
+                    const largest = result.result.photo[result.result.photo.length - 1];
+                    if (!largest) return;
+                    const { data, sha } = await getJson(ghToken, repo);
+                    if (!data[idx] || data[idx].tgFileId === largest.file_id) return;
+                    data[idx].tgFileId = largest.file_id;
+                    await putFile(ghToken, repo, PRODUCTS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: cache photo for product #${idx + 1}`, sha);
+                } catch (e) { console.error('cacheFileId failed:', e.message); }
+            }
+
             async function renderCard(idx) {
                 const { data } = await getJson(ghToken, repo);
                 if (!data.length) return screen('📦 Товарів поки немає.', { reply_markup: backKb([[{ text: '➕ Додати товар', callback_data: 'wiz:0' }]]) });
@@ -142,7 +157,9 @@ module.exports = async (req, res) => {
                     [{ text: '✏️ Редагувати', callback_data: `cedit:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }],
                     [{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]
                 ] };
-                return photoScreen(rawUrl(p.image), caption, { reply_markup: kb });
+                const result = await photoScreen(p.tgFileId || rawUrl(p.image), caption, { reply_markup: kb });
+                if (!p.tgFileId) await cacheFileId(idx, result).catch(() => {});
+                return result;
             }
 
             async function renderEditCard(idx) {
@@ -158,7 +175,9 @@ module.exports = async (req, res) => {
                     [{ text: '⬜ Світла', callback_data: `cet:${idx}:light` }, { text: '⬛ Темна', callback_data: `cet:${idx}:dark` }],
                     [{ text: '↩️ До картки', callback_data: `cat:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }]
                 ] };
-                return photoScreen(rawUrl(p.image), caption, { reply_markup: kb });
+                const result = await photoScreen(p.tgFileId || rawUrl(p.image), caption, { reply_markup: kb });
+                if (!p.tgFileId) await cacheFileId(idx, result).catch(() => {});
+                return result;
             }
 
             async function renderIndex(page) {
@@ -314,8 +333,9 @@ module.exports = async (req, res) => {
         if (msg.photo && msg.photo.length) {
             const f = parseFields(text);
             if (!f.name || !f.price) return done(res, await send('❗ Потрібні хоча б «Назва:» і «Ціна:» в підписі. Простіше натисни ➕ у /menu.'));
-            const image = await commitPhoto(token, ghToken, repo, msg.photo[msg.photo.length - 1].file_id);
-            const p = buildProduct(f, image);
+            const largest = msg.photo[msg.photo.length - 1];
+            const image = await commitPhoto(token, ghToken, repo, largest.file_id);
+            const p = buildProduct(f, image, largest.file_id);
             const idx = await addProduct(ghToken, repo, p);
             return done(res, await renderCardNew(idx));
         }
@@ -337,7 +357,7 @@ module.exports = async (req, res) => {
                 [{ text: '✏️ Редагувати', callback_data: `cedit:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }],
                 [{ text: '➕ Додати', callback_data: 'wiz:0' }, { text: '🏠 Меню', callback_data: 'menu' }]
             ] };
-            return tg('sendPhoto', { chat_id: chatId, photo: rawUrl(p.image), caption, parse_mode: 'HTML', reply_markup: kb });
+            return tg('sendPhoto', { chat_id: chatId, photo: p.tgFileId || rawUrl(p.image), caption, parse_mode: 'HTML', reply_markup: kb });
         }
         async function renderOrdersNew(page) {
             const orders = await listOrders();
@@ -360,8 +380,9 @@ module.exports = async (req, res) => {
             const fieldLabel = (prev.match(/\((Назва|Код|Ціна|Обʼєм|Опис)\)/) || [])[1];
             if (isPhoto) {
                 if (!(m.photo && m.photo.length)) return send('🖼 Потрібне саме ФОТО — надішли у відповідь.', { reply_markup: { force_reply: true } });
-                const image = await commitPhoto(token, ghToken, repo, m.photo[m.photo.length - 1].file_id);
-                await updateProduct(ghToken, repo, idx, {}, image);
+                const largest = m.photo[m.photo.length - 1];
+                const image = await commitPhoto(token, ghToken, repo, largest.file_id);
+                await updateProduct(ghToken, repo, idx, {}, image, largest.file_id);
             } else {
                 const key = fieldMap[fieldLabel];
                 const val = (m.text || '').trim();
@@ -380,7 +401,7 @@ module.exports = async (req, res) => {
                         [{ text: '⬜ Світла', callback_data: `cet:${idx}:light` }, { text: '⬛ Темна', callback_data: `cet:${idx}:dark` }],
                         [{ text: '↩️ До картки', callback_data: `cat:${idx}` }, { text: '🗑 Видалити', callback_data: `cdel:${idx}` }]
                     ] };
-                    await tg('editMessageMedia', { chat_id: chatId, message_id: promptMsgId, media: { type: 'photo', media: rawUrl(p.image), caption, parse_mode: 'HTML' }, reply_markup: kb }).catch(() => {});
+                    await tg('editMessageMedia', { chat_id: chatId, message_id: promptMsgId, media: { type: 'photo', media: p.tgFileId || rawUrl(p.image), caption, parse_mode: 'HTML' }, reply_markup: kb }).catch(() => {});
                 }
             }
             return { ok: true };
@@ -391,8 +412,9 @@ module.exports = async (req, res) => {
             const draft = parseDraft(prev);
             if (/Надішли ФОТО/.test(prev)) {
                 if (!(m.photo && m.photo.length)) return send('🖼 Надішли саме ФОТО у відповідь на повідомлення вище.', { reply_markup: { force_reply: true } });
-                const image = await commitPhoto(token, ghToken, repo, m.photo[m.photo.length - 1].file_id);
-                const p = buildProduct(draft, image);
+                const largest = m.photo[m.photo.length - 1];
+                const image = await commitPhoto(token, ghToken, repo, largest.file_id);
+                const p = buildProduct(draft, image, largest.file_id);
                 const idx = await addProduct(ghToken, repo, p);
                 return renderCardNew(idx);
             }
@@ -474,13 +496,13 @@ function parseFields(text) {
     }
     return out;
 }
-function buildProduct(f, image) {
+function buildProduct(f, image, tgFileId) {
     return {
         code: f.code && f.code !== '—' ? f.code : 'DEPOT',
         name: f.name, sub: f.sub && f.sub !== '—' ? f.sub : '',
         volume: f.volume && f.volume !== '—' ? f.volume : '',
         price: Number(String(f.price).replace(/\D/g, '')) || 0,
-        image, tile: /dark|темна/i.test(f.tile || '') ? 'dark' : 'light',
+        image, tgFileId, tile: /dark|темна/i.test(f.tile || '') ? 'dark' : 'light',
         details: f.details || ''
     };
 }
@@ -511,7 +533,7 @@ async function addProduct(ghToken, repo, product) {
     await putFile(ghToken, repo, PRODUCTS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: add "${product.name}"`, sha);
     return data.length - 1;
 }
-async function updateProduct(ghToken, repo, index, fields, image) {
+async function updateProduct(ghToken, repo, index, fields, image, tgFileId) {
     const { data, sha } = await getJson(ghToken, repo);
     if (index < 0 || index >= data.length) return null;
     const p = data[index];
@@ -521,7 +543,7 @@ async function updateProduct(ghToken, repo, index, fields, image) {
     if (fields.volume !== undefined) p.volume = fields.volume === '-' ? '' : fields.volume;
     if (fields.sub !== undefined) p.sub = fields.sub === '-' ? '' : fields.sub;
     if (fields.tile) p.tile = /dark|темна/i.test(fields.tile) ? 'dark' : 'light';
-    if (image) p.image = image;
+    if (image) { p.image = image; p.tgFileId = tgFileId || undefined; }
     await putFile(ghToken, repo, PRODUCTS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: edit "${p.name}"`, sha);
     return p;
 }
