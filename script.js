@@ -279,6 +279,7 @@ if (barberModal) {
             if (bmName) bmName.textContent = this.dataset.name;
             if (bmTitle) bmTitle.textContent = this.dataset.title;
             if (bmDesc) bmDesc.textContent = this.dataset.desc;
+            barberModal.dataset.alteg = this.dataset.alteg || '';
 
             const src = this.querySelector('.card-photo-src').src;
             if (bmImg) bmImg.style.backgroundImage = `url(${src})`;
@@ -309,7 +310,10 @@ const contactModal = document.getElementById('contactModal');
 document.querySelectorAll('.open-contact-modal').forEach(btn => {
     btn.onclick = (e) => {
         e.preventDefault();
-        window.location.href = 'https://n765746.alteg.io/company/719724/personal/select-master?utm_source=ig&utm_medium=social&utm_content=link_in_bio&o=';
+        const insideBarberModal = e.target.closest('#barberModal');
+        const alteg = insideBarberModal ? (barberModal.dataset.alteg || '') : '';
+        const page = alteg ? 'select-services' : 'select-master';
+        window.location.href = `https://n765746.alteg.io/company/719724/personal/${page}?utm_source=ig&utm_medium=social&utm_content=link_in_bio&o=${alteg}`;
     };
 });
 const closeContact = document.querySelector('.close-contact');
