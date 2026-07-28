@@ -870,6 +870,57 @@ body.menu-open .booking-bubble {
     }
 }
 
+@media (max-width: 640px) {
+    .barber-slider-container {
+        padding: 8px 0;
+    }
+
+    .barber-slider {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+        transform: none !important;
+    }
+
+    .barber-slider .card {
+        min-width: 0;
+        width: 100%;
+        aspect-ratio: 3/4;
+    }
+
+    .barber-card .card-content {
+        padding: 14px;
+    }
+
+    .barber-card .card-content > div:last-child {
+        width: 100%;
+        padding: 10px 12px;
+        background: rgba(4, 4, 4, 0.55);
+        border: none;
+    }
+
+    .barber-card .card-num,
+    .barber-card .btn-outline {
+        display: none;
+    }
+
+    .barber-card .card-title {
+        font-size: 18px;
+    }
+
+    .barber-card .card-subtitle {
+        font-size: 12px;
+    }
+
+    .barber-card .card-meta {
+        display: none;
+    }
+
+    .slider-nav {
+        display: none;
+    }
+}
+
 
 
 .barber-role {

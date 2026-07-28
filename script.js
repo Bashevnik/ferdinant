@@ -150,7 +150,12 @@ if (slider && nextBtn && prevBtn) {
         setSliderPosition();
     }
 
+    function isMobileGrid() {
+        return window.matchMedia('(max-width: 640px)').matches;
+    }
+
     function setSliderPosition() {
+        if (isMobileGrid()) { slider.style.transform = ''; return; }
         slider.style.transform = `translateX(${currentTranslate}px)`;
     }
 
