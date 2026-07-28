@@ -232,16 +232,5 @@
     "tile": "light",
     "details": "",
     "tgFileId": "AgACAgQAAxkDAAOsaluFsPCqfQAByky8CqN904L8oiu-AAJ-DmsbOIHkUgfR8hRND2OyAQADAgADeQADPQQ"
-  },
-  {
-    "code": "106",
-    "name": "Новий товар",
-    "sub": "Опис нового товару",
-    "volume": "",
-    "price": 1200,
-    "image": "new-products-images/bot-1785236942505.jpg",
-    "tgFileId": "AgACAgIAAxkBAAPzamiNzYAAAZeDDZCmNZt_zxsU6MgoAAJMHmsbeYJAS8N9U9xNosx3AQADAgADdwADPQQ",
-    "tile": "light",
-    "details": ""
   }
 ]
