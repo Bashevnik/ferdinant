@@ -6,6 +6,7 @@
 
 const GH = 'https://api.github.com';
 const PRODUCTS_PATH = 'products.json';
+const SERVICES_PATH = 'services.json';
 const IMG_DIR = 'new-products-images';
 const { listOrders, getOrder, deleteOrder } = require('../lib/kv');
 
@@ -18,10 +19,16 @@ const FIELDS = [
     { key: 'sub', label: 'Опис', req: false, prompt: '📄 Короткий опис' },
     { key: 'tile', label: 'Плитка', req: false, prompt: '' } // buttons-only, handled separately
 ];
+// Wizard fields for services (Послуги) — no photo, price is free text (often a range).
+const FIELDS_SVC = [
+    { key: 'name', label: 'Назва', req: true, prompt: '✍️ Назва послуги' },
+    { key: 'desc', label: 'Опис', req: false, prompt: '📄 Короткий опис' },
+    { key: 'price', label: 'Ціна', req: true, prompt: '💰 Ціна (напр. «від 500 до 1000 ₴» або «200 ₴»)' }
+];
 const DOTS = (i, n) => '●'.repeat(i) + '○'.repeat(n - i);
 // Callbacks that show a CUSTOM toast message — everything else is auto-answered
 // silently up front so buttons never show an infinite loading spinner.
-const CUSTOM_TOAST = /^cet:|^cdel:|^cdelc:|^delorder:|^delorderc:|^cef:[^:]*:tile$/;
+const CUSTOM_TOAST = /^cet:|^cdel:|^cdelc:|^delorder:|^delorderc:|^cef:[^:]*:tile$|^svcdel:|^svcdelc:/;
 
 module.exports = async (req, res) => {
     const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -111,6 +118,7 @@ module.exports = async (req, res) => {
     const menuKb = () => ({ inline_keyboard: [
         [{ text: '📦 Каталог товарів', callback_data: 'catlist:0' }],
         [{ text: '➕ Додати товар', callback_data: 'wiz:0' }, { text: '📥 Замовлення', callback_data: 'orders:0' }],
+        [{ text: '💇 Послуги', callback_data: 'svclist:0' }],
         [{ text: '❓ Довідка', callback_data: 'help' }]
     ] });
     const backKb = (extra = []) => ({ inline_keyboard: [...extra, [{ text: '🏠 Меню', callback_data: 'menu' }]] });
@@ -241,6 +249,49 @@ module.exports = async (req, res) => {
                     { text: '🗑 Видалити', callback_data: `delorder:${id}` }, { text: '↩️ До списку', callback_data: 'orders:0' }]] } });
             }
 
+            async function renderServiceIndex(page) {
+                const { data } = await getJson(ghToken, repo, SERVICES_PATH);
+                if (!data.length) return screen('💇 Послуг поки немає.', { reply_markup: backKb([[{ text: '➕ Додати послугу', callback_data: 'wizsvc:0' }]]) });
+                const PER = 10;
+                const pages = Math.ceil(data.length / PER);
+                page = ((page % pages) + pages) % pages;
+                const slice = data.slice(page * PER, page * PER + PER);
+                const rows = slice.map((s, i) => {
+                    const idx = page * PER + i;
+                    return [{ text: `${idx + 1}. ${(s.name || '').slice(0, 30)}`, callback_data: `svc:${idx}` }];
+                });
+                const nav = [];
+                if (pages > 1) nav.push({ text: '◀', callback_data: `svclist:${page - 1}` }, { text: `${page + 1}/${pages}`, callback_data: `svclist:${page}` }, { text: '▶', callback_data: `svclist:${page + 1}` });
+                if (nav.length) rows.push(nav);
+                rows.push([{ text: '➕ Додати', callback_data: 'wizsvc:0' }, { text: '🏠 Меню', callback_data: 'menu' }]);
+                return screen(`💇 <b>Послуги</b> · ${data.length}\nОбери послугу:`, { reply_markup: { inline_keyboard: rows } });
+            }
+
+            async function renderServiceView(idx) {
+                const { data } = await getJson(ghToken, repo, SERVICES_PATH);
+                const n = data.length; if (!n) return screen('Послуги вже немає.', { reply_markup: backKb() });
+                idx = ((idx % n) + n) % n;
+                const s = data[idx];
+                const text = `💇 <b>${esc(s.name || '—')}</b>\n${esc(s.desc || '—')}\n💰 ${esc(s.price || '—')}`;
+                const kb = { inline_keyboard: [
+                    [{ text: '📝 Назва', callback_data: `svcef:${idx}:name` }, { text: '📄 Опис', callback_data: `svcef:${idx}:desc` }],
+                    [{ text: '💰 Ціна', callback_data: `svcef:${idx}:price` }],
+                    [{ text: '🗑 Видалити', callback_data: `svcdel:${idx}` }, { text: '↩️ До списку', callback_data: 'svclist:0' }]
+                ] };
+                return screen(text, { reply_markup: kb });
+            }
+
+            function sendWizardStepSvc(stepIdx, draft, isEdit) {
+                const total = FIELDS_SVC.length;
+                const f = FIELDS_SVC[stepIdx];
+                const text = `${f.req ? '✍️' : '🧭'} <b>Нова послуга</b> · ${DOTS(stepIdx, total)}\n${f.prompt}\n\n${renderDraftSvc(draft)}`;
+                if (f.req) {
+                    return (isEdit ? clearButtons() : Promise.resolve()).then(() => send(text, { reply_markup: { force_reply: true } }));
+                }
+                const kb = { inline_keyboard: [[{ text: '⏭ Пропустити', callback_data: `wskipsvc:${stepIdx}` }]] };
+                return isEdit ? screen(text, { reply_markup: kb }) : send(text, { reply_markup: kb });
+            }
+
             function sendWizardStep(stepIdx, draft, isEdit) {
                 const total = FIELDS.length;
                 if (stepIdx >= total) {
@@ -311,6 +362,38 @@ module.exports = async (req, res) => {
                 return done(res, await sendWizardStep(+stepS + 1, draft, true));
             }
 
+            // ---- services (Послуги) ----
+            if (data.startsWith('svclist:')) return done(res, await renderServiceIndex(+data.slice(8)));
+            if (data.startsWith('svc:')) return done(res, await renderServiceView(+data.slice(4)));
+            if (data.startsWith('svcef:')) {
+                const [, idxS, field] = data.split(':');
+                const labels = { name: 'Назва', desc: 'Опис', price: 'Ціна' };
+                return done(res, await send(`✍️ Напиши нове значення (${labels[field]}) у відповідь на це повідомлення.\n\n<i>Послуга #${+idxS + 1}</i>`, { reply_markup: { force_reply: true } }));
+            }
+            if (data.startsWith('svcdelc:')) {
+                const idx = +data.slice(8);
+                const rm = await deleteService(ghToken, repo, idx);
+                toast(rm ? '🗑 Видалено' : 'Вже видалено');
+                return done(res, await renderServiceIndex(0));
+            }
+            if (data.startsWith('svcdel:')) {
+                const idx = +data.slice(7); const { data: arr } = await getJson(ghToken, repo, SERVICES_PATH);
+                if (!arr[idx]) { toast('Послуги вже немає', true); return done(res, await renderServiceIndex(0)); }
+                toast();
+                return done(res, await screen(`🗑 <b>Видалити «${esc(arr[idx].name)}»?</b>\nЦю дію не можна скасувати.`,
+                    { reply_markup: { inline_keyboard: [[{ text: '✅ Так, видалити', callback_data: `svcdelc:${idx}` }, { text: '↩️ Скасувати', callback_data: `svc:${idx}` }]] } }));
+            }
+            if (data.startsWith('wizsvc:')) return done(res, await sendWizardStepSvc(0, {}, true));
+            if (data.startsWith('wskipsvc:')) {
+                const step = +data.slice(9);
+                const draft = parseDraftSvc(cbq.message.text || '');
+                if (step + 1 >= FIELDS_SVC.length) {
+                    const idx = await addService(ghToken, repo, { name: draft.name, desc: draft.desc || '', price: draft.price });
+                    return done(res, await renderServiceViewNew(idx));
+                }
+                return done(res, await sendWizardStepSvc(step + 1, draft, true));
+            }
+
             // ---- orders ----
             if (data.startsWith('orders:')) return done(res, await renderOrders(+data.slice(7)));
             if (data.startsWith('vieworder:')) return done(res, await renderOrderView(data.slice(10)));
@@ -337,6 +420,14 @@ module.exports = async (req, res) => {
         // ---- edit-field: reply to a "написати нове значення" prompt ----
         if (msg.reply_to_message && /картка #\d+/.test(msg.reply_to_message.text || '')) {
             return done(res, await handleEditFieldReply(msg));
+        }
+        // ---- services wizard: reply to a step prompt ----
+        if (msg.reply_to_message && /Нова послуга/.test(msg.reply_to_message.text || '')) {
+            return done(res, await handleWizardReplySvc(msg));
+        }
+        // ---- services edit-field: reply to a "написати нове значення" prompt ----
+        if (msg.reply_to_message && /Послуга #\d+/.test(msg.reply_to_message.text || '')) {
+            return done(res, await handleEditFieldReplySvc(msg));
         }
 
         // ---- commands ----
@@ -404,6 +495,54 @@ module.exports = async (req, res) => {
             ]);
             rows.push([{ text: '🏠 Меню', callback_data: 'menu' }]);
             return send(`📥 <b>Замовлення</b> (${orders.length})`, { reply_markup: { inline_keyboard: rows } });
+        }
+
+        async function renderServiceViewNew(idx) {
+            const { data } = await getJson(ghToken, repo, SERVICES_PATH);
+            const s = data[idx];
+            if (!s) return send('Послугу вже немає.');
+            const text = `💇 <b>${esc(s.name || '—')}</b>\n${esc(s.desc || '—')}\n💰 ${esc(s.price || '—')}`;
+            const kb = { inline_keyboard: [
+                [{ text: '📝 Назва', callback_data: `svcef:${idx}:name` }, { text: '📄 Опис', callback_data: `svcef:${idx}:desc` }],
+                [{ text: '💰 Ціна', callback_data: `svcef:${idx}:price` }],
+                [{ text: '🗑 Видалити', callback_data: `svcdel:${idx}` }, { text: '↩️ До списку', callback_data: 'svclist:0' }]
+            ] };
+            return send(text, { reply_markup: kb });
+        }
+
+        async function handleEditFieldReplySvc(m) {
+            const prev = m.reply_to_message.text || '';
+            const idx = (Number((prev.match(/Послуга #(\d+)/) || [])[1]) || 1) - 1;
+            const fieldMap = { 'Назва': 'name', 'Опис': 'desc', 'Ціна': 'price' };
+            const fieldLabel = (prev.match(/\((Назва|Опис|Ціна)\)/) || [])[1];
+            const key = fieldMap[fieldLabel];
+            const val = (m.text || '').trim();
+            if (!key || !val) return send('Порожньо — спробуй ще раз.', { reply_markup: { force_reply: true } });
+            await updateService(ghToken, repo, idx, { [key]: val });
+            tg('deleteMessage', { chat_id: chatId, message_id: m.reply_to_message.message_id }).catch(() => {});
+            return renderServiceViewNew(idx);
+        }
+
+        async function handleWizardReplySvc(m) {
+            const prev = m.reply_to_message.text || '';
+            const draft = parseDraftSvc(prev);
+            const filled = (prev.match(/●/g) || []).length;
+            const field = FIELDS_SVC[filled];
+            const val = (m.text || '').trim();
+            if (field.req && !val) {
+                const retryText = `${field.req ? '✍️' : '🧭'} <b>Нова послуга</b> · ${DOTS(filled, FIELDS_SVC.length)}\n${field.prompt}\n\n${renderDraftSvc(draft)}`;
+                return send(retryText, { reply_markup: { force_reply: true } });
+            }
+            if (val) draft[field.key] = val;
+            const next = filled + 1;
+            if (next >= FIELDS_SVC.length) {
+                const idx = await addService(ghToken, repo, { name: draft.name, desc: draft.desc || '', price: draft.price });
+                return renderServiceViewNew(idx);
+            }
+            const f = FIELDS_SVC[next];
+            const text = `${f.req ? '✍️' : '🧭'} <b>Нова послуга</b> · ${DOTS(next, FIELDS_SVC.length)}\n${f.prompt}\n\n${renderDraftSvc(draft)}`;
+            if (f.req) return send(text, { reply_markup: { force_reply: true } });
+            return send(text, { reply_markup: { inline_keyboard: [[{ text: '⏭ Пропустити', callback_data: `wskipsvc:${next}` }]] } });
         }
 
         async function handleEditFieldReply(m) {
@@ -520,6 +659,18 @@ function parseDraft(text) {
     return d;
 }
 
+function renderDraftSvc(d) {
+    return FIELDS_SVC.map((f) => `${f.label}: ${d[f.key] || '—'}`).join('\n');
+}
+function parseDraftSvc(text) {
+    const d = {};
+    for (const f of FIELDS_SVC) {
+        const m = String(text).match(new RegExp('^' + f.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ':\\s*(.*)$', 'm'));
+        if (m) { const v = m[1].trim(); if (v && v !== '—') d[f.key] = v; }
+    }
+    return d;
+}
+
 // ---------- product building ----------
 function parseFields(text) {
     const map = { 'назва': 'name', 'код': 'code', 'ціна': 'price', 'цена': 'price', 'обʼєм': 'volume', "об'єм": 'volume', 'объем': 'volume', 'обсяг': 'volume', 'опис': 'sub', 'описание': 'sub', 'плитка': 'tile', 'склад': 'details' };
@@ -550,8 +701,8 @@ function ghApi(ghToken, path, options = {}) {
         'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json',
         'User-Agent': 'ferdinand-admin-bot', ...(options.headers || {}) } });
 }
-async function getJson(ghToken, repo) {
-    const r = await ghApi(ghToken, `${repo}/contents/${PRODUCTS_PATH}`);
+async function getJson(ghToken, repo, path = PRODUCTS_PATH) {
+    const r = await ghApi(ghToken, `${repo}/contents/${path}`);
     if (r.status === 404) return { data: [], sha: null };
     if (!r.ok) throw new Error(`GitHub read ${r.status}`);
     const j = await r.json();
@@ -588,5 +739,30 @@ async function deleteProduct(ghToken, repo, index) {
     if (index < 0 || index >= data.length) return null;
     const [rm] = data.splice(index, 1);
     await putFile(ghToken, repo, PRODUCTS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: delete "${rm.name}"`, sha);
+    return rm;
+}
+
+// ---------- services (Послуги) ----------
+async function addService(ghToken, repo, service) {
+    const { data, sha } = await getJson(ghToken, repo, SERVICES_PATH);
+    data.push(service);
+    await putFile(ghToken, repo, SERVICES_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: add service "${service.name}"`, sha);
+    return data.length - 1;
+}
+async function updateService(ghToken, repo, index, fields) {
+    const { data, sha } = await getJson(ghToken, repo, SERVICES_PATH);
+    if (index < 0 || index >= data.length) return null;
+    const s = data[index];
+    if (fields.name) s.name = fields.name;
+    if (fields.desc !== undefined) s.desc = fields.desc === '-' ? '' : fields.desc;
+    if (fields.price) s.price = fields.price;
+    await putFile(ghToken, repo, SERVICES_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: edit service "${s.name}"`, sha);
+    return s;
+}
+async function deleteService(ghToken, repo, index) {
+    const { data, sha } = await getJson(ghToken, repo, SERVICES_PATH);
+    if (index < 0 || index >= data.length) return null;
+    const [rm] = data.splice(index, 1);
+    await putFile(ghToken, repo, SERVICES_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: delete service "${rm.name}"`, sha);
     return rm;
 }

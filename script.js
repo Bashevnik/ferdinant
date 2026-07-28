@@ -707,6 +707,25 @@ function initShopCart() {
         open();
     });
 
+    // --- Services list is data-driven: rendered from services.json ---
+    // (managed via the Telegram admin bot — add/edit/delete).
+    const serviceList = document.getElementById('serviceList');
+    if (serviceList) {
+        fetch('services.json', { cache: 'no-store' })
+            .then((response) => (response.ok ? response.json() : []))
+            .then((services) => {
+                if (!Array.isArray(services) || !services.length) return;
+                serviceList.innerHTML = services.map((s, i) => `
+                    <article class="service-row">
+                        <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
+                        <h2 class="service-name head-font">${escapeHtml(s.name || '')}</h2>
+                        <p class="service-desc">${escapeHtml(s.desc || '')}</p>
+                        <span class="service-price">${escapeHtml(s.price || '')}</span>
+                    </article>`).join('');
+            })
+            .catch(() => {});
+    }
+
     // --- Whole catalogue is data-driven: rendered from products.json ---
     // (managed via the Telegram admin bot — add/edit/delete).
     const grid = document.querySelector('.product-grid-new');
