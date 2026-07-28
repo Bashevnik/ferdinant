@@ -236,7 +236,7 @@
   {
     "code": "106",
     "name": "Новий товар",
-    "sub": "",
+    "sub": "Опис нового товару",
     "volume": "",
     "price": 1200,
     "image": "new-products-images/bot-1785236942505.jpg",
