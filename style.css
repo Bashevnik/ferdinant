@@ -889,13 +889,15 @@ body.menu-open .booking-bubble {
     }
 
     .barber-card .card-content {
-        padding: 14px;
+        padding: 0 14px 14px;
+        justify-content: flex-end;
+        background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
     }
 
     .barber-card .card-content > div:last-child {
         width: 100%;
-        padding: 10px 12px;
-        background: rgba(4, 4, 4, 0.55);
+        padding: 0;
+        background: none;
         border: none;
     }
 
@@ -905,11 +907,13 @@ body.menu-open .booking-bubble {
     }
 
     .barber-card .card-title {
-        font-size: 18px;
+        font-size: 17px;
+        margin-bottom: 2px;
     }
 
     .barber-card .card-subtitle {
-        font-size: 12px;
+        font-size: 11px;
+        opacity: 0.85;
     }
 
     .barber-card .card-meta {
