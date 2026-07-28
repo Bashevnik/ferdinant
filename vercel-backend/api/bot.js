@@ -7,7 +7,9 @@
 const GH = 'https://api.github.com';
 const PRODUCTS_PATH = 'products.json';
 const SERVICES_PATH = 'services.json';
+const WORKS_PATH = 'works.json';
 const IMG_DIR = 'new-products-images';
+const WORKS_DIR = 'works';
 const { listOrders, getOrder, deleteOrder } = require('../lib/kv');
 
 // Wizard fields, in order. code/volume/sub optional (skip button); tile is buttons-only.
@@ -118,7 +120,7 @@ module.exports = async (req, res) => {
     const menuKb = () => ({ inline_keyboard: [
         [{ text: '📦 Каталог товарів', callback_data: 'catlist:0' }],
         [{ text: '➕ Додати товар', callback_data: 'wiz:0' }, { text: '📥 Замовлення', callback_data: 'orders:0' }],
-        [{ text: '💇 Послуги', callback_data: 'svclist:0' }],
+        [{ text: '💇 Послуги', callback_data: 'svclist:0' }, { text: '🎬 Наші роботи', callback_data: 'workslist:0' }],
         [{ text: '❓ Довідка', callback_data: 'help' }]
     ] });
     const backKb = (extra = []) => ({ inline_keyboard: [...extra, [{ text: '🏠 Меню', callback_data: 'menu' }]] });
@@ -281,6 +283,37 @@ module.exports = async (req, res) => {
                 return screen(text, { reply_markup: kb });
             }
 
+            async function renderWorksIndex(page) {
+                const { data } = await getJson(ghToken, repo, WORKS_PATH);
+                if (!data.length) return screen('🎬 Робіт поки немає.', { reply_markup: backKb([[{ text: '➕ Додати', callback_data: 'workadd' }]]) });
+                const PER = 10;
+                const pages = Math.ceil(data.length / PER);
+                page = ((page % pages) + pages) % pages;
+                const slice = data.slice(page * PER, page * PER + PER);
+                const rows = slice.map((w, i) => {
+                    const idx = page * PER + i;
+                    const icon = w.type === 'video' ? '🎬' : '🖼';
+                    return [{ text: `${icon} Робота ${idx + 1}`, callback_data: `work:${idx}` }];
+                });
+                const nav = [];
+                if (pages > 1) nav.push({ text: '◀', callback_data: `workslist:${page - 1}` }, { text: `${page + 1}/${pages}`, callback_data: `workslist:${page}` }, { text: '▶', callback_data: `workslist:${page + 1}` });
+                if (nav.length) rows.push(nav);
+                rows.push([{ text: '➕ Додати', callback_data: 'workadd' }, { text: '🏠 Меню', callback_data: 'menu' }]);
+                return screen(`🎬 <b>Наші роботи</b> · ${data.length}\nОбери:`, { reply_markup: { inline_keyboard: rows } });
+            }
+
+            async function renderWorkView(idx) {
+                const { data } = await getJson(ghToken, repo, WORKS_PATH);
+                const n = data.length; if (!n) return screen('Вже немає.', { reply_markup: backKb() });
+                idx = ((idx % n) + n) % n;
+                const w = data[idx];
+                const kb = { inline_keyboard: [[{ text: '🗑 Видалити', callback_data: `workdel:${idx}` }, { text: '↩️ До списку', callback_data: 'workslist:0' }]] };
+                if (w.type === 'video') {
+                    return tg('sendVideo', { chat_id: chatId, video: rawUrl(w.src), caption: `Робота #${idx + 1}`, reply_markup: kb });
+                }
+                return tg('sendPhoto', { chat_id: chatId, photo: rawUrl(w.src), caption: `Робота #${idx + 1}`, reply_markup: kb });
+            }
+
             function sendWizardStepSvc(stepIdx, draft, isEdit) {
                 const total = FIELDS_SVC.length;
                 const f = FIELDS_SVC[stepIdx];
@@ -394,6 +427,26 @@ module.exports = async (req, res) => {
                 return done(res, await sendWizardStepSvc(step + 1, draft, true));
             }
 
+            // ---- works (Наші роботи) ----
+            if (data.startsWith('workslist:')) return done(res, await renderWorksIndex(+data.slice(10)));
+            if (data.startsWith('work:')) return done(res, await renderWorkView(+data.slice(5)));
+            if (data === 'workadd') {
+                return done(res, await send('📤 Надішли ФОТО або ВІДЕО у відповідь на це повідомлення, і воно додасться в "Наші роботи".', { reply_markup: { force_reply: true } }));
+            }
+            if (data.startsWith('workdelc:')) {
+                const idx = +data.slice(9);
+                const rm = await deleteWork(ghToken, repo, idx);
+                toast(rm ? '🗑 Видалено' : 'Вже видалено');
+                return done(res, await renderWorksIndex(0));
+            }
+            if (data.startsWith('workdel:')) {
+                const idx = +data.slice(8); const { data: arr } = await getJson(ghToken, repo, WORKS_PATH);
+                if (!arr[idx]) { toast('Вже немає', true); return done(res, await renderWorksIndex(0)); }
+                toast();
+                return done(res, await screen(`🗑 <b>Видалити цю роботу?</b>\nЦю дію не можна скасувати.`,
+                    { reply_markup: { inline_keyboard: [[{ text: '✅ Так, видалити', callback_data: `workdelc:${idx}` }, { text: '↩️ Скасувати', callback_data: `work:${idx}` }]] } }));
+            }
+
             // ---- orders ----
             if (data.startsWith('orders:')) return done(res, await renderOrders(+data.slice(7)));
             if (data.startsWith('vieworder:')) return done(res, await renderOrderView(data.slice(10)));
@@ -428,6 +481,10 @@ module.exports = async (req, res) => {
         // ---- services edit-field: reply to a "написати нове значення" prompt ----
         if (msg.reply_to_message && /Послуга #\d+/.test(msg.reply_to_message.text || '')) {
             return done(res, await handleEditFieldReplySvc(msg));
+        }
+        // ---- works: reply to the "Надішли ФОТО або ВІДЕО" prompt ----
+        if (msg.reply_to_message && /Надішли ФОТО або ВІДЕО/.test(msg.reply_to_message.text || '')) {
+            return done(res, await handleWorkUpload(msg));
         }
 
         // ---- commands ----
@@ -508,6 +565,24 @@ module.exports = async (req, res) => {
                 [{ text: '🗑 Видалити', callback_data: `svcdel:${idx}` }, { text: '↩️ До списку', callback_data: 'svclist:0' }]
             ] };
             return send(text, { reply_markup: kb });
+        }
+
+        async function handleWorkUpload(m) {
+            if (m.video) {
+                const src = await commitMedia(token, ghToken, repo, m.video.file_id, 'mp4');
+                let poster;
+                const thumb = m.video.thumbnail || m.video.thumb;
+                if (thumb) poster = await commitMedia(token, ghToken, repo, thumb.file_id, 'jpg');
+                const idx = await addWork(ghToken, repo, { type: 'video', src, ...(poster ? { poster } : {}) });
+                return send(`✅ Відео додано в "Наші роботи" (#${idx + 1}).`);
+            }
+            if (m.photo && m.photo.length) {
+                const largest = m.photo[m.photo.length - 1];
+                const src = await commitMedia(token, ghToken, repo, largest.file_id, 'jpg');
+                const idx = await addWork(ghToken, repo, { type: 'image', src });
+                return send(`✅ Фото додано в "Наші роботи" (#${idx + 1}).`);
+            }
+            return send('🖼🎬 Потрібне саме фото або відео — надішли у відповідь на повідомлення вище.', { reply_markup: { force_reply: true } });
         }
 
         async function handleEditFieldReplySvc(m) {
@@ -627,6 +702,17 @@ async function commitPhoto(token, ghToken, repo, fileId) {
     const bytes = Buffer.from(await (await fetch(`https://api.telegram.org/file/bot${token}/${meta.result.file_path}`)).arrayBuffer());
     const name = `${IMG_DIR}/bot-${Date.now()}.jpg`;
     await putFile(ghToken, repo, name, bytes, `bot: product image ${name}`);
+    return name;
+}
+
+// Downloads any Telegram file (photo or video) and commits it into WORKS_DIR,
+// keeping the original extension so <video>/<img> tags work unmodified.
+async function commitMedia(token, ghToken, repo, fileId, ext) {
+    const meta = await (await fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`)).json();
+    if (!meta.ok) throw new Error('getFile failed');
+    const bytes = Buffer.from(await (await fetch(`https://api.telegram.org/file/bot${token}/${meta.result.file_path}`)).arrayBuffer());
+    const name = `${WORKS_DIR}/bot-${Date.now()}.${ext}`;
+    await putFile(ghToken, repo, name, bytes, `bot: add work ${name}`);
     return name;
 }
 
@@ -764,5 +850,20 @@ async function deleteService(ghToken, repo, index) {
     if (index < 0 || index >= data.length) return null;
     const [rm] = data.splice(index, 1);
     await putFile(ghToken, repo, SERVICES_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: delete service "${rm.name}"`, sha);
+    return rm;
+}
+
+// ---------- works (Наші роботи — photos/videos) ----------
+async function addWork(ghToken, repo, work) {
+    const { data, sha } = await getJson(ghToken, repo, WORKS_PATH);
+    data.push(work);
+    await putFile(ghToken, repo, WORKS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: add work (${work.type})`, sha);
+    return data.length - 1;
+}
+async function deleteWork(ghToken, repo, index) {
+    const { data, sha } = await getJson(ghToken, repo, WORKS_PATH);
+    if (index < 0 || index >= data.length) return null;
+    const [rm] = data.splice(index, 1);
+    await putFile(ghToken, repo, WORKS_PATH, Buffer.from(JSON.stringify(data, null, 2) + '\n'), `bot: delete work (${rm.type})`, sha);
     return rm;
 }

@@ -454,16 +454,39 @@ function initPageTransitions() {
     });
 }
 
-// --- ZOOM IMG ---
+// --- PORTFOLIO GRID (data-driven: rendered from works.json, managed via the bot) ---
+const portfolioGrid = document.getElementById('portfolioGrid');
+if (portfolioGrid) {
+    fetch('works.json', { cache: 'no-store' })
+        .then((response) => (response.ok ? response.json() : []))
+        .then((items) => {
+            if (!Array.isArray(items) || !items.length) return;
+            portfolioGrid.innerHTML = items.map((item) => {
+                if (item.type === 'video') {
+                    return `<div class="portfolio-item portfolio-video">
+                        <video src="${item.src}" muted playsinline controls preload="none" ${item.poster ? `poster="${item.poster}"` : ''}></video>
+                    </div>`;
+                }
+                return `<div class="portfolio-item img-zoom">
+                    <img loading="lazy" decoding="async" src="${item.src}" alt="FERDINAND work">
+                </div>`;
+            }).join('');
+        })
+        .catch(() => {});
+}
+
+// --- ZOOM IMG --- (delegated so it also covers items rendered from works.json above)
 const imgOverlay = document.getElementById('imgModalOverlay');
-document.querySelectorAll('.img-zoom').forEach(item => {
-    item.onclick = () => {
+if (portfolioGrid) {
+    portfolioGrid.addEventListener('click', (e) => {
+        const item = e.target.closest('.img-zoom');
+        if (!item) return;
         const src = item.querySelector('img').src;
         const full = document.getElementById('fullScreenImg');
         if (full) full.src = src;
-        imgOverlay.classList.add('active');
-    };
-});
+        if (imgOverlay) imgOverlay.classList.add('active');
+    });
+}
 const closeZoom = document.querySelector('.close-img-modal');
 if (closeZoom) closeZoom.onclick = () => imgOverlay.classList.remove('active');
 
