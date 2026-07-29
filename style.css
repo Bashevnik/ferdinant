@@ -286,6 +286,18 @@ a {
     color: var(--text-main);
 }
 
+.header-instagram {
+    display: flex;
+    align-items: center;
+    color: var(--text-main);
+    opacity: 0.75;
+    transition: opacity 0.3s ease;
+}
+
+.header-instagram:hover {
+    opacity: 1;
+}
+
 .btn-outline {
     border: 1px solid var(--border);
     padding: 12px 24px;
@@ -435,6 +447,15 @@ body.menu-open .booking-bubble {
     border-top: 1px solid var(--border);
     padding-top: 30px;
     margin-bottom: 30px;
+}
+
+.mobile-instagram {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 1px;
 }
 
 
