@@ -617,6 +617,76 @@ function initAboutMarquee() {
 // --- SHOP CART ---
 initShopCart();
 
+// --- Services list is data-driven: rendered from services.json ---
+// (managed via the Telegram admin bot — add/edit/delete).
+const serviceList = document.getElementById('serviceList');
+if (serviceList) {
+    fetch('services.json', { cache: 'no-store' })
+        .then((response) => (response.ok ? response.json() : []))
+        .then((services) => {
+            if (!Array.isArray(services) || !services.length) return;
+            serviceList.innerHTML = services.map((s, i) => `
+                <article class="service-row">
+                    <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
+                    <h2 class="service-name head-font">${escapeHtmlGlobal(s.name || '')}</h2>
+                    <p class="service-desc">${escapeHtmlGlobal(s.desc || '')}</p>
+                    <span class="service-price">${escapeHtmlGlobal(s.price || '')}</span>
+                </article>`).join('');
+        })
+        .catch(() => {});
+}
+
+// --- Whole catalogue is data-driven: rendered from products.json ---
+// (managed via the Telegram admin bot — add/edit/delete).
+const grid = document.querySelector('.product-grid-new');
+if (grid) {
+    fetch('products.json', { cache: 'no-store' })
+        .then((response) => (response.ok ? response.json() : []))
+        .then((products) => {
+            if (!Array.isArray(products) || !products.length) return;
+            const html = products.map((p) => {
+                const price = String(p.price ?? '').replace(/\D/g, '') || '0';
+                // details may be admin-authored HTML (migrated) or plain text (bot)
+                const inner = p.details
+                    ? (/^\s*</.test(p.details) ? p.details : `<p>${escapeHtmlGlobal(p.details)}</p>`)
+                    : '';
+                const details = inner
+                    ? `<div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
+                       <div class="product-details-content">${inner}</div>`
+                    : '';
+                return `
+                <article class="product-card-premium">
+                    <div class="img-container-premium${p.tile === 'dark' ? ' img-dark' : ''}">
+                        <img src="${escapeHtmlGlobal(p.image || '')}" alt="${escapeHtmlGlobal(p.name || '')}" class="primary-img" loading="lazy" decoding="async">
+                    </div>
+                    <div class="info-container-premium">
+                        <div class="product-art">${escapeHtmlGlobal(p.code || 'DEPOT')}</div>
+                        <h2 class="product-name head-font">${escapeHtmlGlobal(p.name || '')}</h2>
+                        <p class="product-sub">${escapeHtmlGlobal(p.sub || '')}</p>
+                        ${details}
+                        <div class="single-volume-badge">${escapeHtmlGlobal(p.volume || '')}</div>
+                        <div class="price-row-premium">
+                            <span class="price-current"><span class="price-val">${escapeHtmlGlobal(price)}</span> ₴</span>
+                        </div>
+                        <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
+                    </div>
+                </article>`;
+            }).join('');
+            grid.innerHTML = html;
+        })
+        .catch(() => {});
+}
+
+function escapeHtmlGlobal(value) {
+    return String(value).replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[char]));
+}
+
 function initShopCart() {
     const panel = document.getElementById('cartPanel');
     if (!panel) return;
@@ -729,66 +799,6 @@ function initShopCart() {
         render();
         open();
     });
-
-    // --- Services list is data-driven: rendered from services.json ---
-    // (managed via the Telegram admin bot — add/edit/delete).
-    const serviceList = document.getElementById('serviceList');
-    if (serviceList) {
-        fetch('services.json', { cache: 'no-store' })
-            .then((response) => (response.ok ? response.json() : []))
-            .then((services) => {
-                if (!Array.isArray(services) || !services.length) return;
-                serviceList.innerHTML = services.map((s, i) => `
-                    <article class="service-row">
-                        <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
-                        <h2 class="service-name head-font">${escapeHtml(s.name || '')}</h2>
-                        <p class="service-desc">${escapeHtml(s.desc || '')}</p>
-                        <span class="service-price">${escapeHtml(s.price || '')}</span>
-                    </article>`).join('');
-            })
-            .catch(() => {});
-    }
-
-    // --- Whole catalogue is data-driven: rendered from products.json ---
-    // (managed via the Telegram admin bot — add/edit/delete).
-    const grid = document.querySelector('.product-grid-new');
-    if (grid) {
-        fetch('products.json', { cache: 'no-store' })
-            .then((response) => (response.ok ? response.json() : []))
-            .then((products) => {
-                if (!Array.isArray(products) || !products.length) return;
-                const html = products.map((p) => {
-                    const price = String(p.price ?? '').replace(/\D/g, '') || '0';
-                    // details may be admin-authored HTML (migrated) or plain text (bot)
-                    const inner = p.details
-                        ? (/^\s*</.test(p.details) ? p.details : `<p>${escapeHtml(p.details)}</p>`)
-                        : '';
-                    const details = inner
-                        ? `<div class="product-details-toggle" onclick="toggleDetails(this)">Детальніше про склад</div>
-                           <div class="product-details-content">${inner}</div>`
-                        : '';
-                    return `
-                    <article class="product-card-premium">
-                        <div class="img-container-premium${p.tile === 'dark' ? ' img-dark' : ''}">
-                            <img src="${escapeHtml(p.image || '')}" alt="${escapeHtml(p.name || '')}" class="primary-img" loading="lazy" decoding="async">
-                        </div>
-                        <div class="info-container-premium">
-                            <div class="product-art">${escapeHtml(p.code || 'DEPOT')}</div>
-                            <h2 class="product-name head-font">${escapeHtml(p.name || '')}</h2>
-                            <p class="product-sub">${escapeHtml(p.sub || '')}</p>
-                            ${details}
-                            <div class="single-volume-badge">${escapeHtml(p.volume || '')}</div>
-                            <div class="price-row-premium">
-                                <span class="price-current"><span class="price-val">${escapeHtml(price)}</span> ₴</span>
-                            </div>
-                            <button class="btn-outline add-to-cart" type="button" style="width: 100%;">ДОДАТИ В КОШИК</button>
-                        </div>
-                    </article>`;
-                }).join('');
-                grid.innerHTML = html;
-            })
-            .catch(() => {});
-    }
 
     itemsNode?.addEventListener('click', (event) => {
         const button = event.target.closest('button[data-cart-action]');
